@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USASpending Code Intelligence Dashboard</title>
+    
+    <!-- USWDS CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@uswds/uswds@3.8.2/dist/css/uswds.min.css">
+    
+    <!-- USWDS JavaScript Initializer -->
+    <script src="https://cdn.jsdelivr.net/npm/@uswds/uswds@3.8.2/dist/js/uswds-init.min.js"></script>
+    
+    <!-- External dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    
+    <!-- Dashboard CSS -->
+    <link rel="stylesheet" href="/assets/dashboard.css">
+</head>
+<body class="usa-body">
+    <!-- USWDS Design System Example Banner Removed: Not a government site -->
+
+    <div class="usa-layout-docs dashboard-flex-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="usa-layout-docs__sidenav collapsible-sidenav" id="sidebarNav" aria-label="Dashboard navigation">
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation" aria-expanded="true" aria-controls="sidebarNav">
+                <span class="toggle-icon" aria-hidden="true">☰</span>
+                <span class="toggle-label">Menu</span>
+            </button>
+            <nav aria-label="Secondary navigation">
+                <div class="header">
+                    <h1 class="usa-header__logo-text">🎯 Code Intelligence</h1>
+                    <p class="usa-intro">USASpending v4 Analysis Dashboard</p>
+                </div>
+                
+                <!-- Search -->
+                <div class="search-container" data-feature="search">
+                    <div class="usa-search usa-search--small">
+                        <div role="search">
+                            <label class="usa-sr-only" for="search-input">Search code</label>
+                            <input class="usa-input" id="search-input" type="search" name="search" placeholder="Search code (Ctrl+K)">
+                            <button class="usa-button" type="submit">
+                                <img src="https://cdn.jsdelivr.net/npm/@uswds/uswds@3.8.2/dist/img/usa-icons-bg/search--white.svg" class="usa-search__submit-icon" alt="Search">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Navigation Menu -->
+                <ul class="usa-sidenav">
+                    <!-- Core Analysis -->
+                    <li class="usa-sidenav__item">
+                        <span class="nav-section-title">📊 Core Analysis</span>
+                        <ul class="usa-sidenav__sublist">
+                            <li class="usa-sidenav__item">
+                                <a href="#overview" class="usa-sidenav__link usa-current" onclick="navigationManager.showSection('overview')">🏠 Overview</a>
+                            </li>
+                            <li class="usa-sidenav__item">
+                                <a href="#files" class="usa-sidenav__link" onclick="navigationManager.showSection('files')">📁 Files</a>
+                            </li>
+                            <li class="usa-sidenav__item">
+                                <a href="#classes" class="usa-sidenav__link" onclick="navigationManager.showSection('classes')">🏗️ Classes</a>
+                            </li>
+                            <li class="usa-sidenav__item">
+                                <a href="#functions" class="usa-sidenav__link" onclick="navigationManager.showSection('functions')">⚙️ Functions</a>
+                            </li>
+                            <li class="usa-sidenav__item">
+                                <a href="#services" class="usa-sidenav__link" onclick="navigationManager.showSection('services')">🔧 Services</a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Relationships -->
+                    <li class="usa-sidenav__item">
+                        <span class="nav-section-title">🌐 Relationships</span>
+                        <ul class="usa-sidenav__sublist">
+                            <li class="usa-sidenav__item">
+                                <a href="#relationships" class="usa-sidenav__link" onclick="navigationManager.showSection('relationships')">🔗 Code Relationships</a>
+                            </li>
+                            <li class="usa-sidenav__item">
+                                <a href="#dependencies" class="usa-sidenav__link" onclick="navigationManager.showSection('dependencies')">📦 Dependencies</a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Architecture -->
+                    <li class="usa-sidenav__item">
+                        <span class="nav-section-title">🏛️ Architecture</span>
+                        <ul class="usa-sidenav__sublist">
+                            <li class="usa-sidenav__item">
+                                <a href="#layers" class="usa-sidenav__link" onclick="navigationManager.showSection('layers')">🏗️ Architectural Layers</a>
+                            </li>
+                            <li class="usa-sidenav__item">
+                                <a href="#complexity" class="usa-sidenav__link" onclick="navigationManager.showSection('complexity')">🎯 Complexity Analysis</a>
+                            </li>
+                            <li class="usa-sidenav__item">
+                                <a href="#domains" class="usa-sidenav__link" onclick="navigationManager.showSection('domains')">🏷️ Domain Analysis</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="usa-layout-docs__main usa-prose" id="mainContent">
+    <script>
+    // Sidebar collapse/expand logic
+    const sidebar = document.getElementById('sidebarNav');
+    const toggleBtn = document.getElementById('sidebarToggle');
+    if (sidebar && toggleBtn) {
+      toggleBtn.addEventListener('click', function() {
+        const collapsed = sidebar.classList.toggle('collapsed');
+        toggleBtn.setAttribute('aria-expanded', !collapsed);
+        document.getElementById('mainContent').classList.toggle('sidebar-collapsed', collapsed);
+      });
+    }
+    </script>
+            <!-- Overview Section -->
+            <div id="overview" class="content-section active">
+                <h1 class="section-title">📊 System Overview</h1>
+                
+                <!-- Statistics Grid -->
+                <div class="grid-row grid-gap stats-grid">
+                    <div class="tablet:grid-col-3">
+                        <div class="usa-summary-box stat-card">
+                            <div class="usa-summary-box__body">
+                                <h2 class="usa-summary-box__heading stat-number" id="totalFiles">-</h2>
+                                <div class="usa-summary-box__text stat-label">Total Files</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tablet:grid-col-3">
+                        <div class="usa-summary-box stat-card">
+                            <div class="usa-summary-box__body">
+                                <h2 class="usa-summary-box__heading stat-number" id="totalClasses">-</h2>
+                                <div class="usa-summary-box__text stat-label">Total Classes</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tablet:grid-col-3">
+                        <div class="usa-summary-box stat-card">
+                            <div class="usa-summary-box__body">
+                                <h2 class="usa-summary-box__heading stat-number" id="totalFunctions">-</h2>
+                                <div class="usa-summary-box__text stat-label">Total Functions</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tablet:grid-col-3">
+                        <div class="usa-summary-box stat-card">
+                            <div class="usa-summary-box__body">
+                                <h2 class="usa-summary-box__heading stat-number" id="avgComplexity">-</h2>
+                                <div class="usa-summary-box__text stat-label">Avg Complexity</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Extra spacing between stats and charts -->
+                <div style="margin-bottom: 3rem;"></div>
+                
+                <!-- Charts -->
+                <div class="grid-row grid-gap charts-container">
+                    <div class="tablet:grid-col-6">
+                        <div class="usa-card chart-container">
+                            <div class="usa-card__container">
+                                <div class="usa-card__header">
+                                    <h3 class="usa-card__heading">Complexity Distribution</h3>
+                                </div>
+                                <div class="usa-card__body">
+                                    <canvas id="complexityChart" width="400" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tablet:grid-col-6">
+                        <div class="usa-card chart-container">
+                            <div class="usa-card__container">
+                                <div class="usa-card__header">
+                                    <h3 class="usa-card__heading">Domain Distribution</h3>
+                                </div>
+                                <div class="usa-card__body">
+                                    <canvas id="domainChart" width="400" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Files Section -->
+            <div id="files" class="content-section" data-feature="files">
+                <h1 class="section-title">📁 Files Analysis</h1>
+                
+                <!-- File Filters -->
+                <div class="usa-form">
+                    <div class="grid-row grid-gap">
+                        <div class="tablet:grid-col-4">
+                            <label class="usa-label" for="fileTypeFilter">File Type</label>
+                            <select class="usa-select" id="fileTypeFilter" onchange="filterFiles()">
+                                <option value="">All Types</option>
+                                <option value="file">Python Files</option>
+                                <option value="js">JavaScript Files</option>
+                                <option value="json">JSON Files</option>
+                                <option value="yaml">YAML Files</option>
+                            </select>
+                        </div>
+                        <div class="tablet:grid-col-4">
+                            <label class="usa-label" for="domainFilter">Domain</label>
+                            <select class="usa-select" id="domainFilter" onchange="filterFiles()">
+                                <option value="">All Domains</option>
+                                <option value="services">Services</option>
+                                <option value="models">Models</option>
+                                <option value="presentation">Presentation</option>
+                                <option value="infrastructure">Infrastructure</option>
+                                <option value="domain">Domain</option>
+                            </select>
+                        </div>
+                        <div class="tablet:grid-col-4">
+                            <label class="usa-label" for="complexityFilter">Complexity</label>
+                            <select class="usa-select" id="complexityFilter" onchange="filterFiles()">
+                                <option value="">All Complexity</option>
+                                <option value="low">Low (1-10)</option>
+                                <option value="medium">Medium (11-50)</option>
+                                <option value="high">High (51+)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Files Table -->
+                <div class="usa-card content-area">
+                    <div class="usa-card__container">
+                        <div class="usa-card__body">
+                            <div class="usa-table-container--scrollable">
+                                <table class="usa-table usa-table--striped" id="filesTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Path</th>
+                                            <th scope="col">Type</th>
+                                            <th scope="col">Domain</th>
+                                            <th scope="col">Complexity</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="filesTableBody">
+                                        <tr>
+                                            <td colspan="6" class="loading">
+                                                <div class="usa-spinner"></div>
+                                                <span class="usa-sr-only">Loading files...</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Classes Section -->
+            <div id="classes" class="content-section" data-feature="classes">
+                <h1 class="section-title">🏗️ Classes Analysis</h1>
+                
+                <!-- Class Type Filters -->
+                <div class="usa-button-group button-group">
+                    <ul class="usa-button-group__list">
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button" onclick="showClassesByType('all')" id="classFilter-all">📦 All Classes</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="showClassesByType('pydantic')" id="classFilter-pydantic">🏷️ Pydantic Models</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="showClassesByType('abstract')" id="classFilter-abstract">🔧 Abstract Classes</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="showClassesByType('enum')" id="classFilter-enum">🎯 Enums</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="showClassesByType('dataclass')" id="classFilter-dataclass">📋 Dataclasses</button>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Class Type Statistics -->
+                <div class="grid-row grid-gap stats-grid" id="classTypeStats">
+                    <div class="tablet:grid-col-3">
+                        <div class="usa-summary-box stat-card">
+                            <div class="usa-summary-box__body">
+                                <h2 class="usa-summary-box__heading stat-number" id="pydanticCount">-</h2>
+                                <div class="usa-summary-box__text stat-label">🏷️ Pydantic Models</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tablet:grid-col-3">
+                        <div class="usa-summary-box stat-card">
+                            <div class="usa-summary-box__body">
+                                <h2 class="usa-summary-box__heading stat-number" id="abstractCount">-</h2>
+                                <div class="usa-summary-box__text stat-label">🔧 Abstract Classes</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tablet:grid-col-3">
+                        <div class="usa-summary-box stat-card">
+                            <div class="usa-summary-box__body">
+                                <h2 class="usa-summary-box__heading stat-number" id="enumCount">-</h2>
+                                <div class="usa-summary-box__text stat-label">🎯 Enums</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tablet:grid-col-3">
+                        <div class="usa-summary-box stat-card">
+                            <div class="usa-summary-box__body">
+                                <h2 class="usa-summary-box__heading stat-number" id="dataclassCount">-</h2>
+                                <div class="usa-summary-box__text stat-label">📋 Dataclasses</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Classes List -->
+                <div class="usa-card content-area">
+                    <div class="usa-card__container">
+                        <div class="usa-card__body">
+                            <div id="classesList" class="list-container loading">
+                                <div class="usa-spinner"></div>
+                                <span class="usa-sr-only">Loading classes...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Functions Section -->
+            <div id="functions" class="content-section" data-feature="functions">
+                <h1 class="section-title">⚙️ Functions Analysis</h1>
+                <div class="usa-card content-area">
+                    <div class="usa-card__container">
+                        <div class="usa-card__body">
+                            <div id="functionsList" class="list-container loading">
+                                <div class="usa-spinner"></div>
+                                <span class="usa-sr-only">Loading functions...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Services Section -->
+            <div id="services" class="content-section" data-feature="services">
+                <h1 class="section-title">🔧 Services Analysis</h1>
+                
+                <!-- Service Type Filters -->
+                <div class="usa-button-group button-group">
+                    <ul class="usa-button-group__list">
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button" onclick="showServicesByType('all')" id="serviceFilter-all">🔧 All Services</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="showServicesByType('service')" id="serviceFilter-service">⚙️ Services</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="showServicesByType('interface')" id="serviceFilter-interface">🔌 Interfaces</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="showServicesByType('validator')" id="serviceFilter-validator">✅ Validators</button>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Service Statistics -->
+                <div class="grid-row grid-gap stats-grid" id="serviceTypeStats">
+                    <div class="tablet:grid-col-3">
+                        <div class="usa-summary-box stat-card">
+                            <div class="usa-summary-box__body">
+                                <h2 class="usa-summary-box__heading stat-number" id="serviceCount">-</h2>
+                                <div class="usa-summary-box__text stat-label">⚙️ Services</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tablet:grid-col-3">
+                        <div class="usa-summary-box stat-card">
+                            <div class="usa-summary-box__body">
+                                <h2 class="usa-summary-box__heading stat-number" id="interfaceCount">-</h2>
+                                <div class="usa-summary-box__text stat-label">🔌 Interfaces</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tablet:grid-col-3">
+                        <div class="usa-summary-box stat-card">
+                            <div class="usa-summary-box__body">
+                                <h2 class="usa-summary-box__heading stat-number" id="validatorCount">-</h2>
+                                <div class="usa-summary-box__text stat-label">✅ Validators</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tablet:grid-col-3">
+                        <div class="usa-summary-box stat-card">
+                            <div class="usa-summary-box__body">
+                                <h2 class="usa-summary-box__heading stat-number" id="factoryCount">-</h2>
+                                <div class="usa-summary-box__text stat-label">🏭 Factories</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Services List -->
+                <div class="usa-card content-area">
+                    <div class="usa-card__container">
+                        <div class="usa-card__body">
+                            <div id="servicesList" class="list-container loading">
+                                <div class="usa-spinner"></div>
+                                <span class="usa-sr-only">Loading services...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Relationships Section -->
+            <div id="relationships" class="content-section">
+                <h1 class="section-title">🌐 Code Relationships</h1>
+                
+                <!-- Collapsible Visualization Options -->
+                <details style="background: var(--dashboard-bg-secondary); padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid var(--dashboard-border-light);">
+                    <summary style="cursor: pointer; color: var(--dashboard-text-primary); font-weight: 600; margin-bottom: 10px;">
+                        📊 Visualization Options (Click to expand)
+                    </summary>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 0.9em; margin-top: 15px;">
+                        <div style="background: var(--dashboard-bg-card); padding: 10px; border-radius: 4px;">
+                            <strong style="color: var(--dashboard-accent-primary);">Standard Diagrams</strong><br>
+                            <small style="color: var(--dashboard-text-muted);">Simple, static diagrams using Mermaid</small>
+                        </div>
+                        <div style="background: var(--dashboard-bg-card); padding: 10px; border-radius: 4px;">
+                            <strong style="color: var(--dashboard-accent-secondary);">Interactive Visualizations</strong><br>
+                            <small style="color: var(--dashboard-text-muted);">Zoomable, draggable networks using D3.js</small>
+                        </div>
+                    </div>
+                </details>
+
+                <div class="usa-button-group button-group">
+                    <ul class="usa-button-group__list">
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button" onclick="visualizationManager.showClassInheritanceGraph(false)">📊 Class Inheritance</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--secondary" onclick="visualizationManager.showClassInheritanceGraph(true)">🎯 Interactive Classes</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="visualizationManager.showImportDependencies(false)">📦 Import Dependencies</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--accent-cool" onclick="visualizationManager.showImportDependencies(true)">🌐 Interactive Network</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="visualizationManager.showFunctionCallGraph()">⚙️ Function Overview</button>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="usa-card content-area">
+                    <div class="usa-card__container">
+                        <div class="usa-card__body">
+                            <div id="relationshipDiagram" class="placeholder-text">
+                                Select a relationship type above to view the diagram
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dependencies Section -->
+            <div id="dependencies" class="content-section">
+                <h1 class="section-title">📦 Dependencies Analysis</h1>
+                
+                <div class="usa-button-group button-group">
+                    <ul class="usa-button-group__list">
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button" onclick="visualizationManager.showModuleDependencies()">🏢 Module Dependencies</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="visualizationManager.showExternalLibraries()">📚 External Libraries</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--secondary" onclick="visualizationManager.debugExternalLibraries()">🔍 Debug</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--accent-cool" onclick="dependencyFlowManager.showSampleFlow()">🌊 Dependency Flow</button>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="usa-card content-area">
+                    <div class="usa-card__container">
+                        <div class="usa-card__body">
+                            <div id="dependencyList" class="placeholder-text">
+                                Select a dependency analysis type above
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Architecture Section -->
+            <div id="architecture" class="content-section">
+                <h1 class="section-title">🏛️ System Architecture</h1>
+                
+                <div class="usa-button-group button-group">
+                    <ul class="usa-button-group__list">
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button" onclick="architecturalLayerManager.showArchitectureOverview()">📊 Architecture Overview</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="architecturalLayerManager.showLayerDiagram()">🏗️ Layer Diagram</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="architecturalLayerManager.showComponentMap()">🗺️ Component Map</button>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Architecture Visualization -->
+                <div class="usa-card content-area">
+                    <div class="usa-card__container">
+                        <div class="usa-card__body">
+                            <div id="architectureDiagram" class="architecture-container">
+                                <div class="loading">
+                                    <div class="usa-spinner"></div>
+                                    <span class="usa-sr-only">Loading architecture diagram...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Layer Cards -->
+                <div class="grid-row grid-gap stats-grid" id="layerCards">
+                    <div class="tablet:grid-col-3">
+                        <div class="usa-summary-box stat-card layer-card" data-layer="presentation">
+                            <div class="usa-summary-box__body">
+                                <h3 class="usa-summary-box__heading">🎨 Presentation</h3>
+                                <div class="usa-summary-box__text">UI, Controllers, CLI</div>
+                                <div class="layer-stats">
+                                    <span id="presentationFiles">-</span> files
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tablet:grid-col-3">
+                        <div class="usa-summary-box stat-card layer-card" data-layer="application">
+                            <div class="usa-summary-box__body">
+                                <h3 class="usa-summary-box__heading">⚙️ Application</h3>
+                                <div class="usa-summary-box__text">Services, Use Cases</div>
+                                <div class="layer-stats">
+                                    <span id="applicationFiles">-</span> files
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tablet:grid-col-3">
+                        <div class="usa-summary-box stat-card layer-card" data-layer="domain">
+                            <div class="usa-summary-box__body">
+                                <h3 class="usa-summary-box__heading">🏗️ Domain</h3>
+                                <div class="usa-summary-box__text">Business Logic</div>
+                                <div class="layer-stats">
+                                    <span id="domainFiles">-</span> files
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tablet:grid-col-3">
+                        <div class="usa-summary-box stat-card layer-card" data-layer="infrastructure">
+                            <div class="usa-summary-box__body">
+                                <h3 class="usa-summary-box__heading">🔧 Infrastructure</h3>
+                                <div class="usa-summary-box__text">Data, External APIs</div>
+                                <div class="layer-stats">
+                                    <span id="infrastructureFiles">-</span> files
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Layer Details -->
+                <div class="usa-card content-area">
+                    <div class="usa-card__container">
+                        <div class="usa-card__body">
+                            <div id="layerDetails" class="placeholder-text">
+                                Click on a layer above to view detailed analysis
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Complexity Section -->
+            <div id="complexity" class="content-section">
+                <h1 class="section-title">🎯 Complexity Analysis</h1>
+                
+                <!-- Complexity Controls -->
+                <div class="usa-button-group button-group">
+                    <ul class="usa-button-group__list">
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button" onclick="complexityAnalyzer.showComplexityOverview()">📊 Overview</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="complexityAnalyzer.showHighComplexityFiles()">🔥 High Complexity</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="complexityAnalyzer.showComplexityTrends()">📈 Trends</button>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Complexity Content -->
+                <div class="usa-card content-area">
+                    <div class="usa-card__container">
+                        <div class="usa-card__body">
+                            <div id="complexityContent" class="loading">
+                                <div class="usa-spinner"></div>
+                                <span class="usa-sr-only">Loading complexity analysis...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Domains Section -->
+            <div id="domains" class="content-section">
+                <h1 class="section-title">🏷️ Domain Analysis</h1>
+                
+                <!-- Domain Controls -->
+                <div class="usa-button-group button-group">
+                    <ul class="usa-button-group__list">
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button" onclick="domainAnalyzer.showDomainOverview()">📊 Overview</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="domainAnalyzer.showDomainDetails()">🔍 Details</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="domainAnalyzer.showCrossDomainDependencies()">🔗 Dependencies</button>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Domain Content -->
+                <div class="usa-card content-area">
+                    <div class="usa-card__container">
+                        <div class="usa-card__body">
+                            <div id="domainContent" class="loading">
+                                <div class="usa-spinner"></div>
+                                <span class="usa-sr-only">Loading domain analysis...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Search Results Section -->
+            <div id="search-results" class="content-section" style="display: none;">
+                <h1 class="section-title">🔍 Search Results</h1>
+                
+                <!-- Search Summary -->
+                <div class="usa-alert usa-alert--info" id="searchSummary" style="display: none;">
+                    <div class="usa-alert__body">
+                        <h3 class="usa-alert__heading">Search Results</h3>
+                        <p class="usa-alert__text" id="searchSummaryText">Found results for your search query.</p>
+                    </div>
+                </div>
+                
+                <!-- Search Results Tabs -->
+                <div class="usa-button-group button-group">
+                    <ul class="usa-button-group__list">
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button" onclick="showSearchResults('all')" id="searchTab-all">📋 All Results</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="showSearchResults('files')" id="searchTab-files">📁 Files</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="showSearchResults('classes')" id="searchTab-classes">🏗️ Classes</button>
+                        </li>
+                        <li class="usa-button-group__item">
+                            <button type="button" class="usa-button usa-button--outline" onclick="showSearchResults('functions')" id="searchTab-functions">⚙️ Functions</button>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Search Results Content -->
+                <div class="usa-card content-area">
+                    <div class="usa-card__container">
+                        <div class="usa-card__body">
+                            <div id="searchResultsContent" class="search-results-container">
+                                <div class="placeholder-text">
+                                    Use the search box above to find files, classes, and functions
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Help/Legend Modal -->
+    <div id="helpModal" class="modal-overlay" style="display: none;" onclick="closeHelpModal()">
+        <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2>📖 Dashboard Guide & Legend</h2>
+                <button class="modal-close" onclick="closeHelpModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Symbols & Icons -->
+                <div class="detail-section">
+                    <h3>🎯 Symbols & Icons</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                        <div style="background: var(--dashboard-bg-tertiary); padding: 15px; border-radius: 6px;">
+                            <h4 style="margin-bottom: 10px;">File Types</h4>
+                            <div style="font-family: monospace; line-height: 1.8;">
+                                📄 Python Files (.py)<br>
+                                📁 Directories<br>
+                                🏗️ Classes<br>
+                                ⚙️ Functions/Methods<br>
+                                📦 Imports/Dependencies
+                            </div>
+                        </div>
+                        <div style="background: var(--dashboard-bg-tertiary); padding: 15px; border-radius: 6px;">
+                            <h4 style="margin-bottom: 10px;">Function Types</h4>
+                            <div style="font-family: monospace; line-height: 1.8;">
+                                🔄 Async Functions<br>
+                                🏷️ Properties<br>
+                                📌 Static Methods<br>
+                                🏛️ Class Methods<br>
+                                🎯 Decorated Functions
+                            </div>
+                        </div>
+                        <div style="background: var(--dashboard-bg-tertiary); padding: 15px; border-radius: 6px;">
+                            <h4 style="margin-bottom: 10px;">Library Types</h4>
+                            <div style="font-family: monospace; line-height: 1.8;">
+                                📚 Standard Library<br>
+                                📦 Third-party Package<br>
+                                🏠 Local/Internal Module<br>
+                                🌐 External Dependency
+                            </div>
+                        </div>
+                        <div style="background: var(--dashboard-bg-tertiary); padding: 15px; border-radius: 6px;">
+                            <h4 style="margin-bottom: 10px;">Status Indicators</h4>
+                            <div style="font-family: monospace; line-height: 1.8;">
+                                ✅ Good/Healthy<br>
+                                ⚠️ Warning/Moderate<br>
+                                🔥 High/Attention Needed<br>
+                                🚨 Critical/Action Required<br>
+                                ❌ Error/Failed
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Complexity Colors -->
+                <div class="detail-section">
+                    <h3>🎨 Complexity Color Coding</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                        <div style="background: #28a745; color: white; padding: 10px; border-radius: 4px; text-align: center;">
+                            <strong>1-10: Simple</strong><br>
+                            <small>Green - Easy to maintain</small>
+                        </div>
+                        <div style="background: #ffc107; color: black; padding: 10px; border-radius: 4px; text-align: center;">
+                            <strong>11-25: Moderate</strong><br>
+                            <small>Yellow - Acceptable</small>
+                        </div>
+                        <div style="background: #fd7e14; color: white; padding: 10px; border-radius: 4px; text-align: center;">
+                            <strong>26-50: High</strong><br>
+                            <small>Orange - Consider refactoring</small>
+                        </div>
+                        <div style="background: #dc3545; color: white; padding: 10px; border-radius: 4px; text-align: center;">
+                            <strong>50+: Very High</strong><br>
+                            <small>Red - Refactoring recommended</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Tips -->
+                <div class="detail-section">
+                    <h3>🧭 Navigation Tips</h3>
+                    <ul style="line-height: 1.8;">
+                        <li><strong>Click on items</strong> in lists to view detailed information</li>
+                        <li><strong>Use the sidebar</strong> to navigate between different analysis sections</li>
+                        <li><strong>Hover over charts</strong> to see detailed tooltips</li>
+                        <li><strong>Use buttons</strong> in relationship sections to switch between different views</li>
+                        <li><strong>Scroll within modals</strong> to see all available information</li>
+                    </ul>
+                </div>
+
+                <!-- Keyboard Shortcuts -->
+                <div class="detail-section">
+                    <h3>⌨️ Keyboard Shortcuts</h3>
+                    <div style="background: var(--dashboard-bg-tertiary); padding: 15px; border-radius: 6px; font-family: monospace;">
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
+                            <kbd style="background: var(--dashboard-bg-card); padding: 4px 8px; border-radius: 3px;">Esc</kbd>
+                            <span>Close current modal</span>
+                            <kbd style="background: var(--dashboard-bg-card); padding: 4px 8px; border-radius: 3px;">?</kbd>
+                            <span>Show/hide this help guide</span>
+                            <kbd style="background: var(--dashboard-bg-card); padding: 4px 8px; border-radius: 3px;">Ctrl + R</kbd>
+                            <span>Refresh dashboard data</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Button -->
+    <button id="helpButton" onclick="toggleHelpModal()" 
+            style="position: fixed; bottom: 20px; right: 20px; background: var(--dashboard-accent-primary); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 1.2rem; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 1000;">
+        ?
+    </button>
+    
+    <!-- USWDS JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/@uswds/uswds@3.8.2/dist/js/uswds.min.js"></script>
+    
+    <!-- Load JavaScript Components -->
+    <script src="/components/reality-based-ui.js"></script>
+    <script src="/components/dashboard-core.js"></script>
+    <script src="/components/navigation-manager.js"></script>
+    <script src="/components/data-loader.js"></script>
+    <script src="/components/search-manager.js"></script>
+    <script src="/components/dependency-flow-manager.js"></script>
+    <script src="/components/d3-visualizer.js"></script>
+    <script src="/components/modal-manager.js"></script>
+    <script src="/components/visualization-manager.js"></script>
+    <script src="/components/architectural-layer-manager.js"></script>
+    <script src="/components/complexity-analyzer.js"></script>
+    <script src="/components/enhanced-complexity-analyzer.js"></script>
+    <script src="/components/domain-analyzer.js"></script>
+    
+    <!-- Initialize Dashboard -->
+    <script>
+        // Initialize dashboard when DOM is loaded
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('🎯 Initializing Code Intelligence Dashboard...');
+            
+            try {
+                // Initialize core components
+                window.navigationManager.initialize();
+                window.visualizationManager.initializeMermaid();
+                window.searchManager.init();
+                
+                // Load layer overview cards
+                const layerCardsContainer = document.getElementById('layerCards');
+                if (layerCardsContainer) {
+                    layerCardsContainer.innerHTML = window.architecturalLayerManager.createLayerOverviewHTML();
+                }
+                
+                // Initialize dashboard
+                await window.dashboard.init();
+                
+                // Initialize analyzers with default views (with delay to ensure DOM is ready)
+                setTimeout(() => {
+                    if (window.complexityAnalyzer) {
+                        console.log('🎯 Initializing complexity analyzer...');
+                        window.complexityAnalyzer.showComplexityOverview().catch(error => {
+                            console.error('❌ Failed to initialize complexity analyzer:', error);
+                        });
+                    }
+                    
+                    // Initialize enhanced complexity analyzer
+                    if (typeof EnhancedComplexityAnalyzer !== 'undefined') {
+                        console.log('📊 Initializing enhanced complexity analyzer...');
+                        window.enhancedComplexityAnalyzer = new EnhancedComplexityAnalyzer();
+                    }
+                    
+                    if (window.domainAnalyzer) {
+                        console.log('🏷️ Initializing domain analyzer...');
+                        window.domainAnalyzer.showDomainOverview().catch(error => {
+                            console.error('❌ Failed to initialize domain analyzer:', error);
+                        });
+                    }
+                }, 1000);
+                
+                console.log('✅ Dashboard initialization complete!');
+                
+            } catch (error) {
+                console.error('❌ Dashboard initialization failed:', error);
+                window.dashboard.showError('Failed to initialize dashboard: ' + error.message);
+            }
+        });
+
+        // Help modal functions
+        window.toggleHelpModal = function() {
+            const modal = document.getElementById('helpModal');
+            if (modal.style.display === 'none' || !modal.style.display) {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            } else {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        };
+
+        window.closeHelpModal = function() {
+            const modal = document.getElementById('helpModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        };
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                window.closeHelpModal();
+            } else if (e.key === '?' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+                e.preventDefault();
+                window.toggleHelpModal();
+            }
+        });
+    </script>
+</body>
+</html>

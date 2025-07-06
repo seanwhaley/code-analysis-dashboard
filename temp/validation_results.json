@@ -1,0 +1,11 @@
+{
+  "timestamp": "2025-07-05 16:45:27",
+  "passed": true,
+  "summary": {
+    "critical": 0,
+    "warning": 2,
+    "info": 3
+  },
+  "duration": 8.224454879760742,
+  "files_checked": 3
+}

@@ -1,0 +1,10 @@
+{
+  "url": "http://localhost:8001/dashboard",
+  "viewport": [
+    1920,
+    1080
+  ],
+  "timestamp": 1751748340.6915243,
+  "http_status": 200,
+  "accessible": true
+}
