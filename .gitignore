@@ -1,6 +1,11 @@
 # Python
 __pycache__/
 *.py[cod]
+temp/
+*.db
+*.log
+*.json
+*.html
 *$py.class
 *.so
 .Python

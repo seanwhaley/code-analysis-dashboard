@@ -53,6 +53,9 @@ class BaseResponse(BaseModel):
         description="Response timestamp",
     )
 
+    class Config:
+        from_attributes = True
+
 
 class ErrorResponse(BaseResponse):
     """Error response model."""
@@ -90,14 +93,17 @@ class FileRecord(BaseModel):
     """File record model."""
 
     id: int = Field(..., description="File ID")
-    name: str = Field(..., description="File name")
-    path: str = Field(..., description="File path")
-    domain: str = Field(..., description="Domain classification")
+    name: str = Field(..., description="File name", min_length=1)
+    path: str = Field(..., description="File path", min_length=1)
+    domain: str = Field(..., description="Domain classification", min_length=1)
     complexity: int = Field(..., description="Complexity score")
     classes: int = Field(..., description="Number of classes")
     functions: int = Field(..., description="Number of functions")
     lines: int = Field(..., description="Number of lines")
-    file_type: str = Field(default="file", description="File type")
+    file_type: str = Field(default="file", description="File type", min_length=1)
+
+    class Config:
+        from_attributes = True
 
 
 class FilesResponse(BaseResponse):
@@ -125,13 +131,16 @@ class ClassRecord(BaseModel):
     """Class record model."""
 
     id: int = Field(..., description="Class ID")
-    name: str = Field(..., description="Class name")
+    name: str = Field(..., description="Class name", min_length=1)
     file_id: int = Field(..., description="File ID containing the class")
-    file_path: str = Field(..., description="File path")
-    domain: str = Field(..., description="Domain classification")
-    class_type: str = Field(..., description="Type of class")
+    file_path: str = Field(..., description="File path", min_length=1)
+    domain: str = Field(..., description="Domain classification", min_length=1)
+    class_type: str = Field(..., description="Type of class", min_length=1)
     methods_count: int = Field(..., description="Number of methods")
     line_number: int = Field(..., description="Starting line number")
+
+    class Config:
+        from_attributes = True
 
 
 class ClassesResponse(BaseResponse):
@@ -145,15 +154,18 @@ class FunctionRecord(BaseModel):
     """Function record model."""
 
     id: int = Field(..., description="Function ID")
-    name: str = Field(..., description="Function name")
+    name: str = Field(..., description="Function name", min_length=1)
     file_id: int = Field(..., description="File ID containing the function")
     class_id: Optional[int] = Field(None, description="Class ID if method")
-    file_path: str = Field(..., description="File path")
-    function_type: str = Field(..., description="Type of function")
+    file_path: str = Field(..., description="File path", min_length=1)
+    function_type: str = Field(..., description="Type of function", min_length=1)
     parameters_count: int = Field(..., description="Number of parameters")
     parameters: Optional[str] = Field(None, description="Function parameters")
     line_number: int = Field(..., description="Starting line number")
     is_async: bool = Field(..., description="Whether function is async")
+
+    class Config:
+        from_attributes = True
 
 
 class FunctionsResponse(BaseResponse):
@@ -167,10 +179,15 @@ class SearchResult(BaseModel):
     """Search result item model."""
 
     id: int = Field(..., description="Item ID")
-    name: str = Field(..., description="Item name")
-    type: str = Field(..., description="Item type (file, class, function)")
+    name: str = Field(..., description="Item name", min_length=1)
+    type: str = Field(
+        ..., description="Item type (file, class, function)", min_length=1
+    )
     file_path: Optional[str] = Field(None, description="File path")
     domain: Optional[str] = Field(None, description="Domain classification")
+
+    class Config:
+        from_attributes = True
 
 
 class SearchResponse(BaseResponse):
@@ -185,9 +202,12 @@ class SearchResponse(BaseResponse):
 class DomainStats(BaseModel):
     """Domain statistics model."""
 
-    name: str = Field(..., description="Domain name")
+    name: str = Field(..., description="Domain name", min_length=1)
     file_count: int = Field(..., description="Number of files in domain")
     model_count: int = Field(..., description="Number of models in domain")
+
+    class Config:
+        from_attributes = True
 
 
 class DomainsResponse(BaseResponse):
@@ -199,8 +219,11 @@ class DomainsResponse(BaseResponse):
 class ComplexityDistribution(BaseModel):
     """Complexity distribution model."""
 
-    complexity_range: str = Field(..., description="Complexity range")
+    complexity_range: str = Field(..., description="Complexity range", min_length=1)
     count: int = Field(..., description="Number of files in range")
+
+    class Config:
+        from_attributes = True
 
 
 class ComplexityResponse(BaseResponse):
@@ -215,13 +238,16 @@ class ServiceRecord(BaseModel):
     """Service record model."""
 
     id: int = Field(..., description="Service ID")
-    name: str = Field(..., description="Service name")
+    name: str = Field(..., description="Service name", min_length=1)
     file_id: int = Field(..., description="File ID containing the service")
-    file_path: str = Field(..., description="File path")
-    domain: str = Field(..., description="Domain classification")
-    class_type: str = Field(..., description="Type of service class")
+    file_path: str = Field(..., description="File path", min_length=1)
+    domain: str = Field(..., description="Domain classification", min_length=1)
+    class_type: str = Field(..., description="Type of service class", min_length=1)
     methods_count: int = Field(..., description="Number of methods")
     line_number: int = Field(..., description="Starting line number")
+
+    class Config:
+        from_attributes = True
 
 
 class ServicesResponse(BaseResponse):
@@ -412,7 +438,8 @@ async def get_files(
             count_params = []
 
             # Add filters if provided
-            where_conditions = []
+            where_conditions: list[str] = []
+            count_params: list[Any] = []
             if search:
                 where_conditions.append("(name LIKE ? OR path LIKE ?)")
                 count_params.extend([f"%{search}%", f"%{search}%"])
@@ -445,7 +472,8 @@ async def get_files(
         )
     except Exception as e:
         return JSONResponse(
-            status_code=500, content=ErrorResponse(error=str(e)).model_dump()
+            status_code=500,
+            content=ErrorResponse(success=False, error=str(e)).model_dump(),
         )
 
 
@@ -516,7 +544,8 @@ async def get_classes(
             count_params = []
 
             # Add filters if provided
-            where_conditions = []
+            where_conditions: list[str] = []
+            count_params: list[Any] = []
             if search:
                 where_conditions.append("(name LIKE ? OR docstring LIKE ?)")
                 count_params.extend([f"%{search}%", f"%{search}%"])
@@ -574,7 +603,8 @@ async def get_functions(
             count_params = []
 
             # Add filters if provided
-            where_conditions = []
+            where_conditions: list[str] = []
+            count_params: list[Any] = []
             if search:
                 where_conditions.append("(name LIKE ? OR docstring LIKE ?)")
                 count_params.extend([f"%{search}%", f"%{search}%"])
@@ -593,6 +623,11 @@ async def get_functions(
 
             cursor.execute(count_query, count_params)
             total_count = cursor.fetchone()[0]
+
+        # Ensure 'parameters' field is present in all function records
+        for func in functions:
+            if "parameters" not in func:
+                func["parameters"] = None
 
         return FunctionsResponse(
             success=True,
