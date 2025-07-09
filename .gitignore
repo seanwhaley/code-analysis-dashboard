@@ -2,10 +2,10 @@
 __pycache__/
 *.py[cod]
 temp/
-*.db
-*.log
-*.json
-*.html
+temp/*.db
+temp/*.log
+temp/*.json
+temp/*.html
 *$py.class
 *.so
 .Python

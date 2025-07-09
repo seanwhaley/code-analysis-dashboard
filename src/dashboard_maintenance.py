@@ -30,8 +30,10 @@ from typing import Any, Dict, List, Optional, Tuple, cast
 # Add API path
 sys.path.append(os.path.dirname(__file__))
 from types import TracebackType
+from typing import Any, Dict, List
 
 from api.sqlite_backend import DocumentationDatabase
+from pydantic import BaseModel
 
 
 class DashboardMaintenance:
@@ -112,8 +114,8 @@ class DashboardMaintenance:
             "functions_checked": 0,
             "functions_fixed": 0,
             "files_processed": 0,
-            "errors": [],  # type: List[str]
-            "fixed_functions": [],  # type: List[Dict[str, Any]]
+            "errors": [],
+            "fixed_functions": [],
         }
 
         try:
@@ -123,7 +125,7 @@ class DashboardMaintenance:
 
             self.db = DocumentationDatabase(str(self.db_path))
 
-            with self.db._get_connection() as conn:  # type: ignore[attr-defined]
+            with self.db._get_connection() as conn:
                 cursor = conn.cursor()
 
                 # Get functions that need parameter data
@@ -245,8 +247,8 @@ class DashboardMaintenance:
             "files_removed": 0,
             "classes_removed": 0,
             "functions_removed": 0,
-            "removed_files": [],  # type: List[str]
-            "errors": [],  # type: List[str]
+            "removed_files": [],
+            "errors": [],
         }
 
         try:
@@ -256,7 +258,7 @@ class DashboardMaintenance:
 
             self.db = DocumentationDatabase(str(self.db_path))
 
-            with self.db._get_connection() as conn:  # type: ignore[attr-defined]
+            with self.db._get_connection() as conn:
                 cursor = conn.cursor()
 
                 # Get all files
@@ -321,7 +323,7 @@ class DashboardMaintenance:
             "direct_query": {},
             "api_method": {},
             "consistency": True,
-            "issues": [],  # type: List[str]
+            "issues": [],
         }
 
         try:
@@ -440,7 +442,7 @@ class DashboardMaintenance:
             "orphaned_records": 0,
             "domain_distribution": {},
             "complexity_distribution": {},
-            "issues": [],  # type: List[str]
+            "issues": [],
         }
 
         try:
@@ -560,10 +562,10 @@ class DashboardMaintenance:
         print("-" * 40)
 
         results: Dict[str, Any] = {
-            "operations_performed": [],  # type: List[str]
+            "operations_performed": [],
             "size_before": 0,
             "size_after": 0,
-            "errors": [],  # type: List[str]
+            "errors": [],
         }
 
         try:
@@ -621,7 +623,7 @@ class DashboardMaintenance:
         print("=" * 60)
         print()
 
-        all_results: Dict[str, Any] = {}
+        all_results: Dict[str, Dict[str, Any]] = {}
 
         # Database analysis
         all_results["database_stats"] = self.analyze_database_stats()
@@ -639,8 +641,15 @@ class DashboardMaintenance:
         all_results["optimize_database"] = self.optimize_database()
         print()
 
+        class MaintenanceSummary(BaseModel):
+            timestamp: str
+            operations_completed: int
+            total_operations: int
+            issues_found: int
+            errors_encountered: int
+
         # Generate summary
-        summary: Dict[str, Any] = {
+        summary_data = {
             "timestamp": __import__("time").strftime("%Y-%m-%d %H:%M:%S"),
             "operations_completed": len(
                 [
@@ -649,7 +658,7 @@ class DashboardMaintenance:
                     if not (
                         cast(List[Any], r.get("errors", []))
                         if isinstance(r, dict)
-                        else False
+                        else [] if isinstance(r, dict) else False
                     )
                 ]
             ),
@@ -666,16 +675,17 @@ class DashboardMaintenance:
             ),
         }
 
-        all_results["summary"] = summary
+        summary = MaintenanceSummary(**summary_data)
+        all_results["summary"] = summary.dict()
 
         print("📋 Maintenance Summary")
         print("=" * 60)
         print(
-            f"Operations completed: {summary['operations_completed']}/{summary['total_operations']}"
+            f"Operations completed: {summary.operations_completed}/{summary.total_operations}"
         )
-        print(f"Issues found: {summary['issues_found']}")
-        print(f"Errors encountered: {summary['errors_encountered']}")
-        print(f"Timestamp: {summary['timestamp']}")
+        print(f"Issues found: {summary.issues_found}")
+        print(f"Errors encountered: {summary.errors_encountered}")
+        print(f"Timestamp: {summary.timestamp}")
 
         return all_results
 

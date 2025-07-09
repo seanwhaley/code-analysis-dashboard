@@ -2,7 +2,7 @@
 
 ## Directory Structure (Best Practice, as of 2025-07-07)
 
-```
+```filetree
 code-intelligence-dashboard/
 │
 ├── src/                       # All core Python modules/scripts
@@ -60,3 +60,38 @@ code-intelligence-dashboard/
 - All documentation is in `docs/`.
 - `api/`, `assets/`, and `components/` remain at the submodule root.
 - `__pycache__/` is gitignored.
+
+---
+
+## Automated Contribution Instructions (as of 2025-07-07)
+
+To contribute changes to this submodule (required by repository rules):
+
+1. **Create a new branch:**
+
+   ```powershell
+   git checkout -b <your-feature-branch>
+   ```
+
+2. **Stage your changes:**
+
+   ```powershell
+   git add .
+   ```
+
+3. **Commit your changes:**
+
+   ```powershell
+   git commit -m "<your descriptive commit message>"
+   ```
+
+4. **Push your branch to origin:**
+
+   ```powershell
+   git push -u origin <your-feature-branch>
+   ```
+
+5. **Open a Pull Request:**
+   - Go to your repository on GitHub and open a PR from your branch.
+
+**Note:** Direct pushes to `main` are blocked. All changes must go through a pull request for code review and compliance scanning.
