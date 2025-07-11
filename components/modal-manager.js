@@ -958,6 +958,98 @@ class ModalManager {
         return `${func.parameters_count} params`;
     }
 
+    // Show system status modal
+    async showSystemStatus() {
+        try {
+            const response = await fetch('/api/stats');
+            const result = await response.json();
+            
+            if (!result.success) {
+                window.dashboard.showError('Failed to load system status');
+                return;
+            }
+            
+            const stats = result.data;
+            const modalHtml = `
+                <div class="modal-overlay" onclick="modalManager.closeModal(this)">
+                    <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 600px;">
+                        <div class="modal-header">
+                            <h2>🖥️ System Status</h2>
+                            <button class="modal-close-btn" onclick="modalManager.closeModal(this.closest('.modal-overlay'))" 
+                                    style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #666;">
+                                ✕
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="detail-section">
+                                <h3>📊 Database Statistics</h3>
+                                <div class="stats-row">
+                                    <div class="stat-item">
+                                        <div class="stat-label">Total Files</div>
+                                        <div class="stat-value">${stats.total_files || 0}</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label">Total Classes</div>
+                                        <div class="stat-value">${stats.total_classes || 0}</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label">Total Functions</div>
+                                        <div class="stat-value">${stats.total_functions || 0}</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label">Avg Complexity</div>
+                                        <div class="stat-value">${stats.avg_complexity ? stats.avg_complexity.toFixed(1) : 'N/A'}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-section">
+                                <h3>🏷️ Domain Distribution</h3>
+                                <div style="display: grid; gap: 8px;">
+                                    ${Object.entries(stats.domain_distribution || {}).map(([domain, count]) => `
+                                        <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--dashboard-bg-tertiary); border-radius: 4px;">
+                                            <span>${domain}</span>
+                                            <span style="font-weight: bold;">${count}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="detail-section">
+                                <h3>⚡ Performance Metrics</h3>
+                                <div style="background: #f8f9fa; padding: 15px; border-radius: 6px;">
+                                    <div style="margin-bottom: 8px;">
+                                        <strong>High Complexity Files:</strong> ${stats.high_complexity_files || 0}
+                                    </div>
+                                    <div style="margin-bottom: 8px;">
+                                        <strong>Total Domains:</strong> ${stats.total_domains || 0}
+                                    </div>
+                                    <div>
+                                        <strong>Last Updated:</strong> ${new Date().toLocaleString()}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="usa-button usa-button--outline" onclick="modalManager.closeModal(this.closest('.modal-overlay'))">
+                                Close
+                            </button>
+                            <button class="usa-button" onclick="window.location.reload()">
+                                Refresh Dashboard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            this.showModal(modalHtml);
+            
+        } catch (error) {
+            console.error('Error loading system status:', error);
+            window.dashboard.showError('Failed to load system status');
+        }
+    }
+
     // Show modal
     showModal(modalHtml) {
         // Close any existing modals first
@@ -982,11 +1074,27 @@ class ModalManager {
         modal.style.display = 'flex';
         modal.style.alignItems = 'center';
         modal.style.justifyContent = 'center';
+        
+        // Add keyboard support for closing modal
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                this.closeModal(modal);
+                document.removeEventListener('keydown', handleKeyDown);
+            }
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        
+        // Store the event handler for cleanup
+        modal._keydownHandler = handleKeyDown;
     }
 
     // Close modal
     closeModal(modalElement) {
         if (modalElement && modalElement.classList.contains('modal-overlay')) {
+            // Remove keyboard event listener if it exists
+            if (modalElement._keydownHandler) {
+                document.removeEventListener('keydown', modalElement._keydownHandler);
+            }
             this.activeModals.delete(modalElement);
             modalElement.remove();
         }
@@ -1006,3 +1114,4 @@ window.modalManager = new ModalManager();
 window.showFileDetails = (fileId) => window.modalManager.showFileDetails(fileId);
 window.showClassDetails = (classId) => window.modalManager.showClassDetails(classId);
 window.showFunctionDetails = (functionId) => window.modalManager.showFunctionDetails(functionId);
+window.showSystemStatus = () => window.modalManager.showSystemStatus();

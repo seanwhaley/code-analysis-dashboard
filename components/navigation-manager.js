@@ -62,12 +62,55 @@ class NavigationManager {
         }
     }
 
-    // Load section data if needed
-    loadSectionIfNeeded(sectionName) {
+    // Enhanced section data loading with dashboard integration
+    async loadSectionIfNeeded(sectionName) {
         const sectionsRequiringData = ['files', 'classes', 'functions', 'services'];
         
         if (sectionsRequiringData.includes(sectionName)) {
-            window.dataLoader.loadSectionData(sectionName);
+            // Use dashboard methods if available for better UX
+            if (window.dashboard && window.dashboard.isInitialized) {
+                try {
+                    switch(sectionName) {
+                        case 'files':
+                            await window.dashboard.loadFiles();
+                            break;
+                        case 'classes':
+                            await window.dashboard.loadClasses();
+                            break;
+                        case 'functions':
+                            await window.dashboard.loadFunctions();
+                            break;
+                        case 'services':
+                            await window.dashboard.loadServices();
+                            break;
+                    }
+                } catch (error) {
+                    console.warn(`Failed to load ${sectionName} via dashboard:`, error);
+                    // Fallback to dataLoader
+                    if (window.dataLoader) {
+                        window.dataLoader.loadSectionData(sectionName);
+                    }
+                }
+            } else if (window.dataLoader) {
+                window.dataLoader.loadSectionData(sectionName);
+            }
+        }
+        
+        // Load analyzer data for specific sections
+        if (sectionName === 'complexity' && window.complexityAnalyzer) {
+            try {
+                await window.complexityAnalyzer.showComplexityOverview();
+            } catch (error) {
+                console.warn('Failed to load complexity analysis:', error);
+            }
+        }
+        
+        if (sectionName === 'domains' && window.domainAnalyzer) {
+            try {
+                await window.domainAnalyzer.showDomainOverview();
+            } catch (error) {
+                console.warn('Failed to load domain analysis:', error);
+            }
         }
     }
 

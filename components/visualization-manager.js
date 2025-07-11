@@ -180,7 +180,7 @@ class VisualizationManager {
                 }
             }
             
-            console.log(`✅ Processed dependencies, found connections: ${hasConnections}`);
+            console.debug("✅ Processed dependencies, found connections: ${hasConnections}");
             
             if (!hasConnections) {
                 this.showNoDependenciesMessage(files.length);
@@ -569,11 +569,11 @@ class VisualizationManager {
                 }
             }
             
-            console.log(`✅ Processed ${processedFiles} files, found ${libraries.size} libraries`);
+            console.debug("✅ Processed ${processedFiles} files, found ${libraries.size} libraries");
             
             // If no libraries found from detailed analysis, try a fallback approach
             if (libraries.size === 0) {
-                console.log('🔄 No libraries found via detailed analysis, trying fallback...');
+                console.debug("🔄 No libraries found via detailed analysis, trying fallback...");
                 this.addFallbackLibraries(libraries, files);
             }
             
@@ -643,20 +643,16 @@ class VisualizationManager {
 
     // Debug method for external libraries
     async debugExternalLibraries() {
-        console.log('🔍 DEBUG: Starting external libraries analysis...');
-        
-        try {
+                try {
             // Test API endpoint
-            console.log('🔍 DEBUG: Testing /api/files endpoint...');
-            const response = await fetch('/api/files?limit=10');
+                        const response = await fetch('/api/files?limit=10');
             console.log('🔍 DEBUG: Response status:', response.status);
             
             const result = await response.json();
             console.log('🔍 DEBUG: Response data:', result);
             
             if (result.success && result.data && result.data.length > 0) {
-                console.log('🔍 DEBUG: Testing detailed file analysis...');
-                const firstFile = result.data[0];
+                                const firstFile = result.data[0];
                 console.log('🔍 DEBUG: First file:', firstFile);
                 
                 const detailResponse = await fetch(`/api/file/${firstFile.id}/detailed`);
@@ -865,6 +861,152 @@ class VisualizationManager {
         this.chartInstances.forEach(chart => chart.destroy());
         this.chartInstances.clear();
     }
+
+    // Show code relationships overview
+    async showCodeRelationships() {
+        const container = document.getElementById('relationshipDiagram') || document.getElementById('mainContent');
+        if (!container) {
+            console.error('No container found for code relationships');
+            return;
+        }
+
+        // Show loading state
+        container.innerHTML = `
+            <div class="loading">
+                <div class="usa-spinner"></div>
+                <span>Loading code relationships...</span>
+            </div>
+        `;
+
+        try {
+            // Get data for relationships
+            const [filesResponse, classesResponse, functionsResponse] = await Promise.all([
+                fetch('/api/files?limit=1000'),
+                fetch('/api/classes?limit=1000'),
+                fetch('/api/functions?limit=1000')
+            ]);
+
+            const [filesResult, classesResult, functionsResult] = await Promise.all([
+                filesResponse.json(),
+                classesResponse.json(),
+                functionsResponse.json()
+            ]);
+
+            if (!filesResult.success || !classesResult.success || !functionsResult.success) {
+                throw new Error('Failed to load relationship data');
+            }
+
+            const files = filesResult.data;
+            const classes = classesResult.data;
+            const functions = functionsResult.data;
+
+            // Create relationships overview
+            const relationshipsHTML = `
+                <div class="relationships-overview">
+                    <h2 style="margin-bottom: 20px;">🔗 Code Relationships Overview</h2>
+                    
+                    <div class="relationship-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">
+                        <div class="stat-card" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2em; color: #007bff;">${files.length}</div>
+                            <div style="color: var(--dashboard-text-secondary);">Files</div>
+                        </div>
+                        <div class="stat-card" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2em; color: #28a745;">${classes.length}</div>
+                            <div style="color: var(--dashboard-text-secondary);">Classes</div>
+                        </div>
+                        <div class="stat-card" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2em; color: #fd7e14;">${functions.length}</div>
+                            <div style="color: var(--dashboard-text-secondary);">Functions</div>
+                        </div>
+                        <div class="stat-card" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2em; color: #6f42c1;">${new Set(files.map(f => f.domain)).size}</div>
+                            <div style="color: var(--dashboard-text-secondary);">Domains</div>
+                        </div>
+                    </div>
+
+                    <div class="relationship-actions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                        <div class="action-card" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px; border-left: 4px solid #007bff;">
+                            <h3 style="color: #007bff; margin-bottom: 10px;">🏗️ Class Inheritance</h3>
+                            <p style="color: var(--dashboard-text-secondary); margin-bottom: 15px;">
+                                Visualize class inheritance hierarchies and relationships between classes.
+                            </p>
+                            <button class="usa-button" onclick="visualizationManager.showClassInheritanceGraph(true)">
+                                Show Class Hierarchy
+                            </button>
+                        </div>
+                        
+                        <div class="action-card" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px; border-left: 4px solid #28a745;">
+                            <h3 style="color: #28a745; margin-bottom: 10px;">📦 Import Dependencies</h3>
+                            <p style="color: var(--dashboard-text-secondary); margin-bottom: 15px;">
+                                Explore how files import and depend on each other across the codebase.
+                            </p>
+                            <button class="usa-button usa-button--outline" onclick="visualizationManager.showImportDependencies()">
+                                Show Dependencies
+                            </button>
+                        </div>
+                        
+                        <div class="action-card" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px; border-left: 4px solid #fd7e14;">
+                            <h3 style="color: #fd7e14; margin-bottom: 10px;">⚙️ Function Calls</h3>
+                            <p style="color: var(--dashboard-text-secondary); margin-bottom: 15px;">
+                                Analyze function call patterns and method interactions.
+                            </p>
+                            <button class="usa-button usa-button--outline" onclick="visualizationManager.showFunctionCallGraph()">
+                                Show Function Calls
+                            </button>
+                        </div>
+                        
+                        <div class="action-card" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px; border-left: 4px solid #6f42c1;">
+                            <h3 style="color: #6f42c1; margin-bottom: 10px;">🌐 Module Network</h3>
+                            <p style="color: var(--dashboard-text-secondary); margin-bottom: 15px;">
+                                View the overall module structure and cross-module dependencies.
+                            </p>
+                            <button class="usa-button usa-button--outline" onclick="visualizationManager.showModuleDependencies()">
+                                Show Module Network
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="domain-breakdown" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px;">
+                        <h3 style="margin-bottom: 15px;">🏷️ Domain Breakdown</h3>
+                        <div style="display: grid; gap: 10px;">
+                            ${Array.from(new Set(files.map(f => f.domain))).map(domain => {
+                                const domainFiles = files.filter(f => f.domain === domain);
+                                const domainClasses = classes.filter(c => c.domain === domain);
+                                const domainFunctions = functions.filter(f => domainFiles.some(df => df.id === f.file_id));
+                                
+                                return `
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: var(--dashboard-bg-tertiary); border-radius: 4px;">
+                                        <div>
+                                            <strong style="color: var(--dashboard-text-primary);">${domain}</strong>
+                                        </div>
+                                        <div style="display: flex; gap: 15px; font-size: 0.9em; color: var(--dashboard-text-secondary);">
+                                            <span>📄 ${domainFiles.length} files</span>
+                                            <span>🏗️ ${domainClasses.length} classes</span>
+                                            <span>⚙️ ${domainFunctions.length} functions</span>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = relationshipsHTML;
+
+        } catch (error) {
+            console.error('Error showing code relationships:', error);
+            container.innerHTML = `
+                <div class="error-state">
+                    <h4>❌ Failed to load code relationships</h4>
+                    <p>${error.message}</p>
+                    <button class="usa-button" onclick="visualizationManager.showCodeRelationships()">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        }
+    }
 }
 
 // Create global visualization manager instance
@@ -876,3 +1018,4 @@ window.showImportDependencies = () => window.visualizationManager.showImportDepe
 window.showFunctionCallGraph = () => window.visualizationManager.showFunctionCallGraph();
 window.showModuleDependencies = () => window.visualizationManager.showModuleDependencies();
 window.showExternalLibraries = () => window.visualizationManager.showExternalLibraries();
+window.showCodeRelationships = () => window.visualizationManager.showCodeRelationships();

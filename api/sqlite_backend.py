@@ -22,14 +22,34 @@ import sqlite3
 from contextlib import asynccontextmanager, contextmanager
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Generator, List, Optional
+from typing import Any, Dict, Generator, List, Optional, Tuple
 
 import aiosqlite
 from pydantic import BaseModel, Field
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+# Configure comprehensive logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s',
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler('dashboard.log', encoding='utf-8')
+    ]
+)
 logger = logging.getLogger(__name__)
+
+# Custom exceptions for better error handling
+class DatabaseError(Exception):
+    """Custom database exception with context."""
+    def __init__(self, message: str, operation: str = None, details: Dict[str, Any] = None):
+        self.message = message
+        self.operation = operation
+        self.details = details or {}
+        super().__init__(self.message)
+        
+class ValidationError(Exception):
+    """Data validation exception."""
+    pass
 
 
 class FileRecord(BaseModel):
@@ -283,7 +303,7 @@ class DocumentationDatabase:
 
     def _init_sync_database(self) -> None:
         """Create database schema synchronously for compatibility."""
-        with self._get_connection() as conn:
+        with self.get_connection() as conn:
             self._create_schema(conn.cursor())
             conn.commit()
 
@@ -359,57 +379,39 @@ class DocumentationDatabase:
         limit: int = 50,
         offset: int = 0,
     ) -> List[Dict[str, Any]]:
-        """Search functions with various filters. Returns all columns, including parameters, for full API data linking."""
-        with self._get_connection() as conn:
+        """Search functions with various filters. Returns list of function dictionaries."""
+        with self.get_connection() as conn:
             cursor = conn.cursor()
-
-            select_columns = (
-                "*"  # Select all columns to ensure 'parameters' is included
-            )
-
+            select_columns = "*"
+            params: list[Any] = []
+            where_conditions: list[str] = []
             if query:
-                cursor.execute(
-                    f"""
-                    SELECT {select_columns} FROM functions 
-                    WHERE name LIKE ? OR file_path LIKE ?
-                    ORDER BY name
-                    LIMIT ? OFFSET ?
+                where_conditions.append("(name LIKE ? OR file_path LIKE ?)")
+                params.extend([f"%{query}%", f"%{query}%"])
+            if function_type:
+                where_conditions.append("function_type = ?")
+                params.append(function_type)
+            if class_id is not None:
+                where_conditions.append("class_id = ?")
+                params.append(class_id)
+            where_clause = (
+                "WHERE " + " AND ".join(where_conditions) if where_conditions else ""
+            )
+            cursor.execute(
+                f"""
+                SELECT {select_columns} FROM functions 
+                {where_clause}
+                ORDER BY complexity_score DESC, name
+                LIMIT ? OFFSET ?
                 """,
-                    (f"%{query}%", f"%{query}%", limit, offset),
-                )
-            else:
-                where_conditions: list[str] = []
-                params: list[Any] = []
-
-                if function_type:
-                    where_conditions.append("function_type = ?")
-                    params.append(function_type)
-
-                if class_id is not None:
-                    where_conditions.append("class_id = ?")
-                    params.append(class_id)
-
-                where_clause = (
-                    "WHERE " + " AND ".join(where_conditions)
-                    if where_conditions
-                    else ""
-                )
-
-                cursor.execute(
-                    f"""
-                    SELECT {select_columns} FROM functions 
-                    {where_clause}
-                    ORDER BY complexity_score DESC, name
-                    LIMIT ? OFFSET ?
-                """,
-                    params + [limit, offset],
-                )
-
-            return [dict(row) for row in cursor.fetchall()]
+                params + [limit, offset],
+            )
+            rows = cursor.fetchall()
+            return [dict(row) for row in rows]
 
     def init_database(self) -> None:
         """Create database schema if it doesn't exist."""
-        with self._get_connection() as conn:
+        with self.get_connection() as conn:
             cursor = conn.cursor()
             self._create_schema(cursor)
             conn.commit()
@@ -598,6 +600,7 @@ class DocumentationDatabase:
                 end_line_number INTEGER NOT NULL,
                 function_type TEXT NOT NULL DEFAULT 'function',
                 parameters_count INTEGER NOT NULL DEFAULT 0,
+                parameters TEXT,
                 return_type TEXT,
                 decorators TEXT DEFAULT '[]',
                 docstring TEXT,
@@ -644,26 +647,6 @@ class DocumentationDatabase:
                 file_id INTEGER NOT NULL,
                 arguments TEXT DEFAULT '[]',
                 line_number INTEGER DEFAULT 0,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (file_id) REFERENCES files (id) ON DELETE CASCADE
-            )
-        """
-        )
-
-        # Variables table
-        cursor.execute(
-            """
-            CREATE TABLE IF NOT EXISTS variables (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                file_id INTEGER NOT NULL,
-                scope_type TEXT NOT NULL,
-                scope_id INTEGER,
-                variable_type TEXT DEFAULT 'unknown',
-                line_number INTEGER DEFAULT 0,
-                is_constant BOOLEAN DEFAULT FALSE,
-                is_public BOOLEAN DEFAULT TRUE,
-                default_value TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (file_id) REFERENCES files (id) ON DELETE CASCADE
             )
@@ -911,8 +894,8 @@ class DocumentationDatabase:
         )
 
     @contextmanager
-    def _get_connection(self) -> Generator[sqlite3.Connection, None, None]:
-        """Get database connection with proper error handling."""
+    def get_connection(self) -> Generator[sqlite3.Connection, None, None]:
+        """Public: Get database connection with proper error handling for safe external use."""
         conn = sqlite3.connect(self.db_path)
         conn.row_factory = sqlite3.Row  # Enable column access by name
         try:
@@ -952,7 +935,7 @@ class DocumentationDatabase:
             models_imported = 0
             relationships_imported = 0
 
-            with self._get_connection() as conn:
+            with self.get_connection() as conn:
                 cursor = conn.cursor()
 
                 # Import files
@@ -1101,7 +1084,7 @@ class DocumentationDatabase:
 
     def clear_all_data(self) -> None:
         """Clear all data from database."""
-        with self._get_connection() as conn:
+        with self.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute("DELETE FROM change_log")
             cursor.execute("DELETE FROM annotations")
@@ -1123,7 +1106,7 @@ class DocumentationDatabase:
         offset: int = 0,
     ) -> List[Dict[str, Any]]:
         """Search files with various filters."""
-        with self._get_connection() as conn:
+        with self.get_connection() as conn:
             cursor = conn.cursor()
 
             where_conditions: list[str] = []
@@ -1223,7 +1206,7 @@ class DocumentationDatabase:
         offset: int = 0,
     ) -> List[Dict[str, Any]]:
         """Search models with various filters."""
-        with self._get_connection() as conn:
+        with self.get_connection() as conn:
             cursor = conn.cursor()
 
             if query:
@@ -1269,7 +1252,7 @@ class DocumentationDatabase:
 
     def get_complexity_distribution(self) -> List[Dict[str, Any]]:
         """Get complexity distribution for charts."""
-        with self._get_connection() as conn:
+        with self.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
                 """
@@ -1294,7 +1277,7 @@ class DocumentationDatabase:
 
     def get_domain_statistics(self) -> List[Dict[str, Any]]:
         """Get domain statistics."""
-        with self._get_connection() as conn:
+        with self.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
                 """
@@ -1307,7 +1290,7 @@ class DocumentationDatabase:
 
     def get_top_complex_files(self, limit: int = 20) -> List[Dict[str, Any]]:
         """Get most complex files."""
-        with self._get_connection() as conn:
+        with self.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
                 """
@@ -1322,29 +1305,49 @@ class DocumentationDatabase:
 
     def get_system_stats(self) -> Dict[str, Any]:
         """Get overall system statistics."""
-        with self._get_connection() as conn:
+        with self.get_connection() as conn:
             cursor = conn.cursor()
 
             # Get basic counts
-            cursor.execute("SELECT COUNT(*) as total_files FROM files")
-            total_files = cursor.fetchone()["total_files"]
+            cursor.execute("SELECT COUNT(*) FROM files")
+            total_files = cursor.fetchone()[0]
 
-            cursor.execute("SELECT COUNT(*) as total_models FROM models")
-            total_models = cursor.fetchone()["total_models"]
+            cursor.execute("SELECT COUNT(*) FROM classes")
+            total_classes = cursor.fetchone()[0]
 
-            cursor.execute("SELECT COUNT(*) as total_relationships FROM relationships")
-            total_relationships = cursor.fetchone()["total_relationships"]
+            cursor.execute("SELECT COUNT(*) FROM functions")
+            total_functions = cursor.fetchone()[0]
 
-            cursor.execute("SELECT AVG(complexity) as avg_complexity FROM files")
-            avg_complexity = cursor.fetchone()["avg_complexity"] or 0
+            cursor.execute("SELECT COUNT(*) FROM imports")
+            total_imports = cursor.fetchone()[0]
 
-            cursor.execute("SELECT COUNT(DISTINCT domain) as total_domains FROM files")
-            total_domains = cursor.fetchone()["total_domains"]
+            cursor.execute("SELECT COUNT(*) FROM models")
+            total_models = cursor.fetchone()[0]
+
+            cursor.execute("SELECT COUNT(*) FROM relationships")
+            total_relationships = cursor.fetchone()[0]
+
+            cursor.execute("SELECT COUNT(*) FROM decorators")
+            total_decorators = cursor.fetchone()[0]
+
+            cursor.execute("SELECT COUNT(*) FROM variables")
+            total_variables = cursor.fetchone()[0]
+
+            cursor.execute("SELECT AVG(complexity) FROM files")
+            avg_complexity = cursor.fetchone()[0] or 0
+
+            cursor.execute("SELECT COUNT(DISTINCT domain) FROM files")
+            total_domains = cursor.fetchone()[0]
 
             return {
                 "total_files": total_files,
+                "total_classes": total_classes,
+                "total_functions": total_functions,
+                "total_imports": total_imports,
                 "total_models": total_models,
                 "total_relationships": total_relationships,
+                "total_decorators": total_decorators,
+                "total_variables": total_variables,
                 "avg_complexity": round(avg_complexity, 1),
                 "total_domains": total_domains,
             }
@@ -1448,7 +1451,7 @@ class DocumentationDatabase:
         author: str = None,
     ) -> int:
         """Add user annotation."""
-        with self._get_connection() as conn:
+        with self.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
                 """
@@ -1464,7 +1467,7 @@ class DocumentationDatabase:
         self, target_type: str = None, target_id: int = None
     ) -> List[Dict[str, Any]]:
         """Get annotations."""
-        with self._get_connection() as conn:
+        with self.get_connection() as conn:
             cursor = conn.cursor()
 
             where_conditions: list[str] = []
@@ -1497,7 +1500,7 @@ class DocumentationDatabase:
 
     def get_file_detailed_content(self, file_id: int) -> Dict[str, Any]:
         """Get comprehensive file content including all classes, functions, imports, etc."""
-        with self._get_connection() as conn:
+        with self.get_connection() as conn:
             cursor = conn.cursor()
 
             # Get file info
@@ -1590,161 +1593,36 @@ class DocumentationDatabase:
     def search_classes(
         self,
         query: Optional[str] = None,
-        domain: Optional[str] = None,
         class_type: Optional[str] = None,
         limit: int = 50,
         offset: int = 0,
     ) -> List[Dict[str, Any]]:
         """Search classes with various filters."""
-        with self._get_connection() as conn:
+        with self.get_connection() as conn:
             cursor = conn.cursor()
+            params: list[Any] = []
+            where_conditions: list[str] = []
 
             if query:
-                # Use LIKE search instead of FTS for better compatibility
-                cursor.execute(
-                    """
-                    SELECT * FROM classes 
-                    WHERE name LIKE ? OR file_path LIKE ?
-                    ORDER BY name
-                    LIMIT ? OFFSET ?
+                where_conditions.append("(name LIKE ? OR file_path LIKE ?)")
+                params.extend([f"%{query}%", f"%{query}%"])
+            if class_type:
+                where_conditions.append("class_type = ?")
+                params.append(class_type)
+
+            where_clause = (
+                "WHERE " + " AND ".join(where_conditions) if where_conditions else ""
+            )
+
+            cursor.execute(
+                f"""
+                SELECT * FROM classes 
+                {where_clause}
+                ORDER BY complexity_score DESC, name
+                LIMIT ? OFFSET ?
                 """,
-                    (f"%{query}%", f"%{query}%", limit, offset),
-                )
-            else:
-                where_conditions: list[str] = []
-                params: list[Any] = []
-
-                if domain:
-                    where_conditions.append("domain = ?")
-                    params.append(domain)
-
-                if class_type:
-                    where_conditions.append("class_type = ?")
-                    params.append(class_type)
-
-                where_clause = (
-                    "WHERE " + " AND ".join(where_conditions)
-                    if where_conditions
-                    else ""
-                )
-
-                cursor.execute(
-                    f"""
-                    SELECT * FROM classes 
-                    {where_clause}
-                    ORDER BY complexity_score DESC, name
-                    LIMIT ? OFFSET ?
-                """,
-                    params + [limit, offset],
-                )
-
-            return [dict(row) for row in cursor.fetchall()]
-
-    async def search_classes_async(
-        self,
-        query: Optional[str] = None,
-        domain: Optional[str] = None,
-        class_type: Optional[str] = None,
-        limit: int = 50,
-        offset: int = 0,
-    ) -> List[Dict[str, Any]]:
-        """Search classes with various filters asynchronously."""
-        async with self._get_async_connection() as conn:
-            cursor = await conn.cursor()
-
-            if query:
-                # Use LIKE search instead of FTS for better compatibility
-                await cursor.execute(
-                    """
-                    SELECT * FROM classes 
-                    WHERE name LIKE ? OR file_path LIKE ?
-                    ORDER BY name
-                    LIMIT ? OFFSET ?
-                """,
-                    (f"%{query}%", f"%{query}%", limit, offset),
-                )
-            else:
-                where_conditions: list[str] = []
-                params: list[Any] = []
-
-                if domain:
-                    where_conditions.append("domain = ?")
-                    params.append(domain)
-
-                if class_type:
-                    where_conditions.append("class_type = ?")
-                    params.append(class_type)
-
-                where_clause = (
-                    "WHERE " + " AND ".join(where_conditions)
-                    if where_conditions
-                    else ""
-                )
-
-                await cursor.execute(
-                    f"""
-                    SELECT * FROM classes 
-                    {where_clause}
-                    ORDER BY complexity_score DESC, name
-                    LIMIT ? OFFSET ?
-                """,
-                    params + [limit, offset],
-                )
-
-            rows = await cursor.fetchall()
-            return [dict(row) for row in rows]
-
-    def search_functions(
-        self,
-        query: Optional[str] = None,
-        function_type: Optional[str] = None,
-        class_id: Optional[int] = None,
-        limit: int = 50,
-        offset: int = 0,
-    ) -> List[Dict[str, Any]]:
-        """Search functions with various filters."""
-        with self._get_connection() as conn:
-            cursor = conn.cursor()
-
-            select_columns = "id, name, file_id, class_id, file_path, function_type, parameters_count, parameters, line_number, is_async"
-
-            if query:
-                cursor.execute(
-                    f"""
-                    SELECT {select_columns} FROM functions 
-                    WHERE name LIKE ? OR file_path LIKE ?
-                    ORDER BY name
-                    LIMIT ? OFFSET ?
-                """,
-                    (f"%{query}%", f"%{query}%", limit, offset),
-                )
-            else:
-                where_conditions: list[str] = []
-                params: list[Any] = []
-
-                if function_type:
-                    where_conditions.append("function_type = ?")
-                    params.append(function_type)
-
-                if class_id is not None:
-                    where_conditions.append("class_id = ?")
-                    params.append(class_id)
-
-                where_clause = (
-                    "WHERE " + " AND ".join(where_conditions)
-                    if where_conditions
-                    else ""
-                )
-
-                cursor.execute(
-                    f"""
-                    SELECT {select_columns} FROM functions 
-                    {where_clause}
-                    ORDER BY complexity_score DESC, name
-                    LIMIT ? OFFSET ?
-                """,
-                    params + [limit, offset],
-                )
+                params + [limit, offset],
+            )
 
             return [dict(row) for row in cursor.fetchall()]
 
@@ -1756,7 +1634,7 @@ class DocumentationDatabase:
         offset: int = 0,
     ) -> List[Dict[str, Any]]:
         """Search service classes with various filters."""
-        with self._get_connection() as conn:
+        with self.get_connection() as conn:
             cursor = conn.cursor()
 
             # Service patterns to identify service classes
@@ -1775,267 +1653,144 @@ class DocumentationDatabase:
                 "Client",
             ]
 
-            # Build the service pattern condition
             service_condition = " OR ".join(
                 [f"name LIKE '%{pattern}%'" for pattern in service_patterns]
             )
 
-            if query:
-                # Search within service classes
-                cursor.execute(
-                    f"""
-                    SELECT * FROM classes 
-                    WHERE ({service_condition}) 
-                    AND (name LIKE ? OR file_path LIKE ? OR docstring LIKE ?)
-                    ORDER BY name
-                    LIMIT ? OFFSET ?
-                    """,
-                    (f"%{query}%", f"%{query}%", f"%{query}%", limit, offset),
-                )
-            else:
-                where_conditions: list[str] = [f"({service_condition})"]
-                params: list[Any] = []
-
-                if service_type:
-                    where_conditions.append("class_type = ?")
-                    params.append(service_type)
-
-                where_clause = "WHERE " + " AND ".join(where_conditions)
-
-                cursor.execute(
-                    f"""
-                    SELECT * FROM classes 
-                    {where_clause}
-                    ORDER BY complexity_score DESC, name
-                    LIMIT ? OFFSET ?
-                    """,
-                    params + [limit, offset],
-                )
-
-            return [dict(row) for row in cursor.fetchall()]
-
-    def get_architectural_layers(self) -> List[Dict[str, Any]]:
-        """Get all architectural layers for TOGAF/DoDAF visualization."""
-        with self._get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                """
-                SELECT * FROM architectural_layers 
-                ORDER BY 
-                    CASE layer_type 
-                        WHEN 'presentation' THEN 1
-                        WHEN 'application' THEN 2
-                        WHEN 'domain' THEN 3
-                        WHEN 'infrastructure' THEN 4
-                        WHEN 'data' THEN 5
-                        ELSE 6
-                    END, name
-                """
-            )
-            return [dict(row) for row in cursor.fetchall()]
-
-    def get_components_by_layer(self, layer_id: int) -> List[Dict[str, Any]]:
-        """Get all components in a specific architectural layer."""
-        with self._get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                """
-                SELECT * FROM components 
-                WHERE layer_id = ?
-                ORDER BY component_type, name
-                """,
-                (layer_id,),
-            )
-            return [dict(row) for row in cursor.fetchall()]
-
-    def get_enhanced_relationships(
-        self,
-        source_type: Optional[str] = None,
-        source_id: Optional[int] = None,
-        relationship_type: Optional[str] = None,
-    ) -> List[Dict[str, Any]]:
-        """Get enhanced relationships for visualization."""
-        with self._get_connection() as conn:
-            cursor = conn.cursor()
-
-            where_conditions: list[str] = []
             params: list[Any] = []
+            where_conditions = [f"({service_condition})"]
 
-            if source_type:
-                where_conditions.append("source_type = ?")
-                params.append(source_type)
+            if query:
+                where_conditions.append("(name LIKE ? OR file_path LIKE ?)")
+                params.extend([f"%{query}%", f"%{query}%"])
+            if service_type:
+                where_conditions.append("class_type = ?")
+                params.append(service_type)
 
-            if source_id is not None:
-                where_conditions.append("source_id = ?")
-                params.append(source_id)
-
-            if relationship_type:
-                where_conditions.append("relationship_type = ?")
-                params.append(relationship_type)
-
-            where_clause = (
-                "WHERE " + " AND ".join(where_conditions) if where_conditions else ""
-            )
+            where_clause = "WHERE " + " AND ".join(where_conditions)
 
             cursor.execute(
                 f"""
-                SELECT * FROM enhanced_relationships 
+                SELECT * FROM classes 
                 {where_clause}
-                ORDER BY strength DESC, frequency DESC
+                ORDER BY complexity_score DESC, name
+                LIMIT ? OFFSET ?
                 """,
-                params,
+                params + [limit, offset],
             )
+
             return [dict(row) for row in cursor.fetchall()]
 
-    def get_import_dependencies(self, file_id: int) -> Dict[str, Any]:
-        """Get detailed import dependencies for a file."""
-        with self._get_connection() as conn:
+    def get_file_by_id(self, file_id: int) -> Optional[Dict[str, Any]]:
+        """Get file by ID."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM files WHERE id = ?", (file_id,))
+            row = cursor.fetchone()
+            return dict(row) if row else None
+
+    def get_class_by_id(self, class_id: int) -> Optional[Dict[str, Any]]:
+        """Get class by ID."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM classes WHERE id = ?", (class_id,))
+            row = cursor.fetchone()
+            return dict(row) if row else None
+
+    def get_function_by_id(self, function_id: int) -> Optional[Dict[str, Any]]:
+        """Get function by ID."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM functions WHERE id = ?", (function_id,))
+            row = cursor.fetchone()
+            return dict(row) if row else None
+
+    def get_decorators(
+        self,
+        limit: int = 100,
+        offset: int = 0,
+        search: Optional[str] = None,
+        file_id: Optional[int] = None,
+    ) -> Tuple[List[Dict[str, Any]], int]:
+        """Get paginated decorators with optional filtering."""
+        with self.get_connection() as conn:
             cursor = conn.cursor()
 
-            # Get all imports for this file
-            cursor.execute(
-                """
-                SELECT * FROM imports 
-                WHERE file_id = ?
+            # Build query conditions
+            conditions = []
+            params = []
+
+            if search:
+                conditions.append("name LIKE ?")
+                params.append(f"%{search}%")
+
+            if file_id:
+                conditions.append("file_id = ?")
+                params.append(file_id)
+
+            where_clause = f" WHERE {' AND '.join(conditions)}" if conditions else ""
+
+            # Get total count
+            count_query = f"SELECT COUNT(*) FROM decorators{where_clause}"
+            cursor.execute(count_query, params)
+            total_count = cursor.fetchone()[0]
+
+            # Get paginated results
+            query = f"""
+                SELECT * FROM decorators
+                {where_clause}
                 ORDER BY line_number
-                """,
-                (file_id,),
-            )
-            imports = [dict(row) for row in cursor.fetchall()]
+                LIMIT ? OFFSET ?
+            """
+            cursor.execute(query, params + [limit, offset])
+            decorators = [dict(row) for row in cursor.fetchall()]
 
-            # Categorize imports
-            standard_library = [imp for imp in imports if imp["is_standard_library"]]
-            third_party = [imp for imp in imports if imp["is_third_party"]]
-            local_imports = [imp for imp in imports if imp["is_local"]]
+            return decorators, total_count
 
-            # Get files that import this file
-            cursor.execute(
-                """
-                SELECT f.*, i.* FROM files f
-                JOIN imports i ON f.id = i.file_id
-                WHERE i.module_name LIKE ? OR i.module_name IN (
-                    SELECT DISTINCT module_name FROM imports WHERE file_id = ?
-                )
-                """,
-                (f"%{file_id}%", file_id),
-            )
-            dependent_files = [dict(row) for row in cursor.fetchall()]
-
-            return {
-                "imports": imports,
-                "standard_library": standard_library,
-                "third_party": third_party,
-                "local_imports": local_imports,
-                "dependent_files": dependent_files,
-            }
-
-    def update_class_types(self) -> Dict[str, int]:
-        """Update class types based on enhanced detection logic."""
-        with self._get_connection() as conn:
+    def get_relationships(
+        self,
+        limit: int = 100,
+        offset: int = 0,
+        search: Optional[str] = None,
+        relationship_type: Optional[str] = None,
+    ) -> Tuple[List[Dict[str, Any]], int]:
+        """Get paginated relationships with optional filtering."""
+        with self.get_connection() as conn:
             cursor = conn.cursor()
 
-            # Get all classes with their base classes
-            cursor.execute(
-                """
-                SELECT id, name, base_classes, docstring, file_path
-                FROM classes 
-                WHERE class_type = 'class'
+            # Build query conditions
+            conditions = []
+            params = []
+
+            if search:
+                conditions.append("(source_name LIKE ? OR target_name LIKE ?)")
+                params.extend([f"%{search}%", f"%{search}%"])
+
+            if relationship_type:
+                conditions.append("relationship_type = ?")
+                params.append(relationship_type)
+
+            where_clause = f" WHERE {' AND '.join(conditions)}" if conditions else ""
+
+            # Get total count
+            count_query = f"SELECT COUNT(*) FROM relationships{where_clause}"
+            cursor.execute(count_query, params)
+            total_count = cursor.fetchone()[0]
+
+            # Get paginated results with the new schema
+            query = f"""
+                SELECT * FROM relationships
+                {where_clause}
+                ORDER BY id
+                LIMIT ? OFFSET ?
             """
-            )
+            cursor.execute(query, params + [limit, offset])
+            relationships = [dict(row) for row in cursor.fetchall()]
 
-            classes_to_update = cursor.fetchall()
+            return relationships, total_count
 
-            updates = {
-                "pydantic_model": 0,
-                "abstract_class": 0,
-                "interface": 0,
-                "exception": 0,
-                "enum": 0,
-                "dataclass": 0,
-                "service": 0,
-                "validator": 0,
-                "factory": 0,
-                "manager": 0,
-                "handler": 0,
-                "provider": 0,
-                "repository": 0,
-                "controller": 0,
-            }
 
-            for class_row in classes_to_update:
-                class_id, name, base_classes_json, docstring, file_path = class_row
-                new_type = self._determine_enhanced_class_type(
-                    name, base_classes_json, docstring, file_path
-                )
-
-                if new_type != "class":
-                    cursor.execute(
-                        """
-                        UPDATE classes 
-                        SET class_type = ? 
-                        WHERE id = ?
-                    """,
-                        (new_type, class_id),
-                    )
-                    updates[new_type] += 1
-
-            conn.commit()
-            return updates
-
-    def _determine_enhanced_class_type(
-        self, name: str, base_classes_json: str, docstring: str, file_path: str
-    ) -> str:
-        """Determine enhanced class type based on various indicators."""
-        import json
-
-        try:
-            base_classes = json.loads(base_classes_json) if base_classes_json else []
-        except:
-            base_classes = []
-
-        # Check for Pydantic models
-        for base in base_classes:
-            if "BaseModel" in base:
-                return "pydantic_model"
-
-        # Check for abstract classes
-        for base in base_classes:
-            if "Abstract" in base or "ABC" in base:
-                return "abstract_class"
-
-        # Check for exceptions
-        for base in base_classes:
-            if "Exception" in base or "Error" in base:
-                return "exception"
-
-        # Check for enums
-        for base in base_classes:
-            if "Enum" in base:
-                return "enum"
-
-        # Check name patterns for service classes
-        service_patterns = {
-            "Service": "service",
-            "Interface": "interface",
-            "Validator": "validator",
-            "Factory": "factory",
-            "Manager": "manager",
-            "Handler": "handler",
-            "Provider": "provider",
-            "Repository": "repository",
-            "Controller": "controller",
-        }
-
-        for pattern, class_type in service_patterns.items():
-            if pattern in name:
-                return class_type
-
-        # Check for dataclass decorator (would need to check decorators table)
-        # For now, check docstring or file path hints
-        if docstring and "@dataclass" in docstring:
-            return "dataclass"
-
-        return "class"
+# ...existing code...
 
 
 def main() -> None:

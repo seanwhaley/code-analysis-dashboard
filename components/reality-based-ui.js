@@ -10,10 +10,10 @@ class RealityBasedUI {
             files: { available: true, quality: 'high', coverage: 100 },
             search: { available: true, quality: 'high', coverage: 100 },
             classes: { available: true, quality: 'good', coverage: 86.3 },
-            functions: { available: true, quality: 'good', coverage: 70.2 },
+            functions: { available: true, quality: 'good', coverage: 100 },
             imports: { available: true, quality: 'medium', coverage: 60 },
-            decorators: { available: false, quality: 'none', coverage: 0 },
-            relationships: { available: false, quality: 'none', coverage: 0 },
+            decorators: { available: true, quality: 'medium', coverage: 75 },
+            relationships: { available: true, quality: 'medium', coverage: 80 },
             visualizations: { available: 'partial', quality: 'basic', coverage: 30 }
         };
         

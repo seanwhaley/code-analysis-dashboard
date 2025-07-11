@@ -407,6 +407,114 @@ class ArchitecturalLayerManager {
         }
     }
 
+    // Show specific architectural layer
+    async showArchitecturalLayer(layerType) {
+        try {
+            // Get files data
+            const response = await fetch('/api/files?limit=5000');
+            const result = await response.json();
+            
+            if (!result.success) {
+                throw new Error('Failed to load files data');
+            }
+            
+            const files = result.data;
+            const layerFiles = this.filterFilesByLayer(files, layerType);
+            const layerDef = this.layerDefinitions[layerType];
+            
+            if (!layerDef) {
+                throw new Error(`Unknown layer type: ${layerType}`);
+            }
+            
+            // Create detailed layer view
+            const layerHTML = `
+                <div class="layer-detail-view" style="background: ${layerDef.color.bg}; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <h2 style="color: ${layerDef.color.title}; margin-bottom: 10px;">
+                        ${layerDef.icon} ${layerDef.title}
+                    </h2>
+                    <p style="color: ${layerDef.color.desc}; margin-bottom: 20px;">
+                        ${layerDef.description}
+                    </p>
+                    
+                    <div class="layer-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                        <div style="background: rgba(255,255,255,0.8); padding: 15px; border-radius: 6px; text-align: center;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: ${layerDef.color.title};">${layerFiles.length}</div>
+                            <div style="color: ${layerDef.color.desc}; font-size: 0.9em;">Files</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.8); padding: 15px; border-radius: 6px; text-align: center;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: ${layerDef.color.title};">${layerFiles.reduce((sum, f) => sum + (f.classes || 0), 0)}</div>
+                            <div style="color: ${layerDef.color.desc}; font-size: 0.9em;">Classes</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.8); padding: 15px; border-radius: 6px; text-align: center;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: ${layerDef.color.title};">${layerFiles.reduce((sum, f) => sum + (f.functions || 0), 0)}</div>
+                            <div style="color: ${layerDef.color.desc}; font-size: 0.9em;">Functions</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.8); padding: 15px; border-radius: 6px; text-align: center;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: ${layerDef.color.title};">${layerFiles.length > 0 ? (layerFiles.reduce((sum, f) => sum + (f.complexity || 0), 0) / layerFiles.length).toFixed(1) : '0'}</div>
+                            <div style="color: ${layerDef.color.desc}; font-size: 0.9em;">Avg Complexity</div>
+                        </div>
+                    </div>
+                    
+                    <div class="layer-files">
+                        <h3 style="color: ${layerDef.color.title}; margin-bottom: 15px;">📁 Files in this Layer</h3>
+                        <div style="display: grid; gap: 10px;">
+                            ${layerFiles.map(file => `
+                                <div class="list-item" onclick="modalManager.showFileDetails(${file.id})" 
+                                     style="cursor: pointer; background: rgba(255,255,255,0.9); padding: 15px; border-radius: 6px; border-left: 4px solid ${layerDef.color.title};">
+                                    <div class="list-item-title" style="color: ${layerDef.color.title}; font-weight: bold;">
+                                        📄 ${file.name}
+                                    </div>
+                                    <div class="list-item-meta" style="color: ${layerDef.color.desc}; margin: 5px 0;">
+                                        ${file.path}
+                                    </div>
+                                    <div class="list-item-stats" style="display: flex; gap: 15px; font-size: 0.9em;">
+                                        <span style="color: ${layerDef.color.count};">Classes: ${file.classes || 0}</span>
+                                        <span style="color: ${layerDef.color.count};">Functions: ${file.functions || 0}</span>
+                                        <span style="color: ${layerDef.color.count};">Complexity: ${file.complexity || 0}</span>
+                                        <span style="color: ${layerDef.color.count};">Lines: ${file.lines || 0}</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Show in modal or dedicated container
+            if (window.modalManager) {
+                const modalHTML = `
+                    <div class="modal-overlay" onclick="modalManager.closeModal(this)">
+                        <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 900px; max-height: 80vh; overflow-y: auto;">
+                            <div class="modal-header">
+                                <h2>${layerDef.icon} ${layerDef.title} Analysis</h2>
+                                <button class="modal-close-btn" onclick="modalManager.closeModal(this.closest('.modal-overlay'))" 
+                                        style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #666;">
+                                    ✕
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                ${layerHTML}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                window.modalManager.showModal(modalHTML);
+            } else {
+                // Fallback: show in main content area
+                const container = document.getElementById('layerDetails') || document.getElementById('mainContent');
+                if (container) {
+                    container.innerHTML = layerHTML;
+                }
+            }
+            
+        } catch (error) {
+            console.error('Error showing architectural layer:', error);
+            if (window.dashboard && window.dashboard.showError) {
+                window.dashboard.showError(`Failed to load ${layerType} layer: ${error.message}`);
+            }
+        }
+    }
+
     // Get layer statistics
     async getLayerStatistics() {
         try {

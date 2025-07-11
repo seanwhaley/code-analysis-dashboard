@@ -39,7 +39,9 @@ def main():
     print()
 
     # Check if we're in the right directory
-    current_dir = Path(__file__).parent
+    current_dir = Path(
+        __file__
+    ).parent.parent  # Go up one level from src to code-intelligence-dashboard
     expected_files = ["dashboard.html", "api/server.py", "components/dashboard-core.js"]
 
     missing_files = []

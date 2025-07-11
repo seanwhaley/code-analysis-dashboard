@@ -473,18 +473,234 @@ class DomainAnalyzer {
         `;
     }
 
+    // Show services by domain
+    async showServicesByDomain() {
+        try {
+            const response = await fetch('/api/services?limit=1000');
+            const result = await response.json();
+            
+            if (!result.success) {
+                throw new Error('Failed to load services data');
+            }
+            
+            const services = result.data;
+            const servicesByDomain = {};
+            
+            // Group services by domain
+            services.forEach(service => {
+                if (!servicesByDomain[service.domain]) {
+                    servicesByDomain[service.domain] = [];
+                }
+                servicesByDomain[service.domain].push(service);
+            });
+            
+            const html = `
+                <h3 style="margin-bottom: 20px; color: var(--dashboard-text-primary);">🔧 Services by Domain</h3>
+                
+                <div class="services-overview" style="margin-bottom: 30px;">
+                    <div class="stats-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div class="stat-card" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2em; color: #007bff;">${services.length}</div>
+                            <div style="color: var(--dashboard-text-secondary);">Total Services</div>
+                        </div>
+                        <div class="stat-card" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2em; color: #28a745;">${Object.keys(servicesByDomain).length}</div>
+                            <div style="color: var(--dashboard-text-secondary);">Domains</div>
+                        </div>
+                        <div class="stat-card" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2em; color: #fd7e14;">${services.reduce((sum, s) => sum + (s.methods_count || 0), 0)}</div>
+                            <div style="color: var(--dashboard-text-secondary);">Total Methods</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="domains-grid" style="display: grid; gap: 20px;">
+                    ${Object.entries(servicesByDomain).map(([domain, domainServices]) => `
+                        <div class="domain-section" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px; border-left: 4px solid ${this.getDomainColor(domain)};">
+                            <h4 style="color: var(--dashboard-text-primary); margin-bottom: 15px;">
+                                🏷️ ${domain} Domain (${domainServices.length} services)
+                            </h4>
+                            <div class="services-grid" style="display: grid; gap: 10px;">
+                                ${domainServices.map(service => `
+                                    <div class="service-item" onclick="modalManager.showClassDetails(${service.id})" 
+                                         style="cursor: pointer; background: var(--dashboard-bg-tertiary); padding: 15px; border-radius: 6px; transition: background-color 0.2s;">
+                                        <div class="service-title" style="font-weight: bold; color: var(--dashboard-text-primary); margin-bottom: 5px;">
+                                            🔧 ${service.name}
+                                        </div>
+                                        <div class="service-meta" style="color: var(--dashboard-text-secondary); font-size: 0.9em; margin-bottom: 10px;">
+                                            ${service.file_path} • Line ${service.line_number || '?'}
+                                        </div>
+                                        <div class="service-stats" style="display: flex; gap: 15px; font-size: 0.8em;">
+                                            <span style="color: var(--dashboard-text-muted);">Methods: ${service.methods_count || 0}</span>
+                                            <span style="color: var(--dashboard-text-muted);">Type: ${service.class_type || 'service'}</span>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            const container = document.getElementById('domainContent') || document.getElementById('mainContent');
+            if (container) {
+                container.innerHTML = html;
+            }
+            
+        } catch (error) {
+            console.error('Error showing services by domain:', error);
+            this.showErrorMessage(`Failed to load services by domain: ${error.message}`);
+        }
+    }
+
+    // Show method composition analysis
+    async showMethodComposition() {
+        try {
+            const [functionsResponse, classesResponse] = await Promise.all([
+                fetch('/api/functions?limit=1000'),
+                fetch('/api/classes?limit=1000')
+            ]);
+            
+            const [functionsResult, classesResult] = await Promise.all([
+                functionsResponse.json(),
+                classesResponse.json()
+            ]);
+            
+            if (!functionsResult.success || !classesResult.success) {
+                throw new Error('Failed to load method composition data');
+            }
+            
+            const functions = functionsResult.data;
+            const classes = classesResult.data;
+            
+            // Analyze method composition
+            const methodTypes = {};
+            const classMethodCounts = {};
+            const parameterDistribution = {};
+            
+            functions.forEach(func => {
+                // Count by function type
+                const type = func.function_type || 'function';
+                methodTypes[type] = (methodTypes[type] || 0) + 1;
+                
+                // Count methods per class
+                if (func.class_id) {
+                    classMethodCounts[func.class_id] = (classMethodCounts[func.class_id] || 0) + 1;
+                }
+                
+                // Parameter distribution
+                const paramCount = func.parameters_count || 0;
+                const paramRange = paramCount === 0 ? '0' : 
+                                 paramCount <= 2 ? '1-2' :
+                                 paramCount <= 5 ? '3-5' : '6+';
+                parameterDistribution[paramRange] = (parameterDistribution[paramRange] || 0) + 1;
+            });
+            
+            const html = `
+                <h3 style="margin-bottom: 20px; color: var(--dashboard-text-primary);">⚙️ Method Composition Analysis</h3>
+                
+                <div class="composition-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                    <div class="stat-section" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px;">
+                        <h4 style="color: var(--dashboard-text-primary); margin-bottom: 15px;">📊 Method Types</h4>
+                        <div style="display: grid; gap: 8px;">
+                            ${Object.entries(methodTypes).map(([type, count]) => `
+                                <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--dashboard-bg-tertiary); border-radius: 4px;">
+                                    <span style="color: var(--dashboard-text-secondary);">${type}</span>
+                                    <span style="font-weight: bold; color: var(--dashboard-text-primary);">${count}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="stat-section" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px;">
+                        <h4 style="color: var(--dashboard-text-primary); margin-bottom: 15px;">📈 Parameter Distribution</h4>
+                        <div style="display: grid; gap: 8px;">
+                            ${Object.entries(parameterDistribution).map(([range, count]) => `
+                                <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--dashboard-bg-tertiary); border-radius: 4px;">
+                                    <span style="color: var(--dashboard-text-secondary);">${range} params</span>
+                                    <span style="font-weight: bold; color: var(--dashboard-text-primary);">${count}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="stat-section" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px;">
+                        <h4 style="color: var(--dashboard-text-primary); margin-bottom: 15px;">🏗️ Class Composition</h4>
+                        <div style="color: var(--dashboard-text-secondary); margin-bottom: 10px;">
+                            Classes with most methods:
+                        </div>
+                        <div style="display: grid; gap: 8px;">
+                            ${Object.entries(classMethodCounts)
+                                .sort(([,a], [,b]) => b - a)
+                                .slice(0, 5)
+                                .map(([classId, count]) => {
+                                    const cls = classes.find(c => c.id == classId);
+                                    return `
+                                        <div style="display: flex; justify-content: space-between; padding: 8px; background: var(--dashboard-bg-tertiary); border-radius: 4px;">
+                                            <span style="color: var(--dashboard-text-secondary); cursor: pointer;" onclick="modalManager.showClassDetails(${classId})">
+                                                ${cls ? cls.name : `Class ${classId}`}
+                                            </span>
+                                            <span style="font-weight: bold; color: var(--dashboard-text-primary);">${count}</span>
+                                        </div>
+                                    `;
+                                }).join('')}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="method-details" style="background: var(--dashboard-bg-card); padding: 20px; border-radius: 8px;">
+                    <h4 style="color: var(--dashboard-text-primary); margin-bottom: 15px;">🔍 Method Analysis</h4>
+                    <div style="display: grid; gap: 15px;">
+                        <div style="display: flex; justify-content: space-between; padding: 15px; background: var(--dashboard-bg-tertiary); border-radius: 6px;">
+                            <span style="color: var(--dashboard-text-secondary);">Total Functions/Methods</span>
+                            <span style="font-weight: bold; color: var(--dashboard-text-primary);">${functions.length}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 15px; background: var(--dashboard-bg-tertiary); border-radius: 6px;">
+                            <span style="color: var(--dashboard-text-secondary);">Async Functions</span>
+                            <span style="font-weight: bold; color: var(--dashboard-text-primary);">${functions.filter(f => f.is_async).length}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 15px; background: var(--dashboard-bg-tertiary); border-radius: 6px;">
+                            <span style="color: var(--dashboard-text-secondary);">Class Methods</span>
+                            <span style="font-weight: bold; color: var(--dashboard-text-primary);">${functions.filter(f => f.class_id).length}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 15px; background: var(--dashboard-bg-tertiary); border-radius: 6px;">
+                            <span style="color: var(--dashboard-text-secondary);">File-level Functions</span>
+                            <span style="font-weight: bold; color: var(--dashboard-text-primary);">${functions.filter(f => !f.class_id).length}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const container = document.getElementById('domainContent') || document.getElementById('mainContent');
+            if (container) {
+                container.innerHTML = html;
+            }
+            
+        } catch (error) {
+            console.error('Error showing method composition:', error);
+            this.showErrorMessage(`Failed to load method composition: ${error.message}`);
+        }
+    }
+
     // Show error message
     showErrorMessage(message) {
-        document.getElementById('domainContent').innerHTML = `
-            <div style="background: var(--dashboard-bg-tertiary); padding: 20px; border-radius: 8px; text-align: center; color: var(--dashboard-accent-error);">
-                <p>❌ ${message}</p>
-                <button class="usa-button usa-button--outline" onclick="domainAnalyzer.showDomainOverview()" style="margin-top: 15px;">
-                    Try Again
-                </button>
-            </div>
-        `;
+        const container = document.getElementById('domainContent') || document.getElementById('mainContent');
+        if (container) {
+            container.innerHTML = `
+                <div style="background: var(--dashboard-bg-tertiary); padding: 20px; border-radius: 8px; text-align: center; color: var(--dashboard-accent-error);">
+                    <p>❌ ${message}</p>
+                    <button class="usa-button usa-button--outline" onclick="domainAnalyzer.showDomainOverview()" style="margin-top: 15px;">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        }
     }
 }
 
 // Create global domain analyzer instance
 window.domainAnalyzer = new DomainAnalyzer();
+
+// Global functions for backwards compatibility
+window.showServicesByDomain = () => window.domainAnalyzer.showServicesByDomain();
+window.showMethodComposition = () => window.domainAnalyzer.showMethodComposition();

@@ -30,8 +30,8 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import requests
 
-# Add API path
-sys.path.append(os.path.dirname(__file__))
+# Add API path - fix import path
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from api.sqlite_backend import DocumentationDatabase
 
 

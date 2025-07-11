@@ -1,0 +1,1450 @@
+{
+  "issues": [],
+  "warnings": [
+    {
+      "category": "JAVASCRIPT",
+      "message": "3 console.log statements in complexity-analyzer.js",
+      "file": null,
+      "severity": "WARNING"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "3 console.log statements in d3-visualizer.js",
+      "file": null,
+      "severity": "WARNING"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "7 console.log statements in dashboard-core.js",
+      "file": null,
+      "severity": "WARNING"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "23 console.log statements in data-loader.js",
+      "file": null,
+      "severity": "WARNING"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "4 console.log statements in dependency-flow-manager.js",
+      "file": null,
+      "severity": "WARNING"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "3 console.log statements in domain-analyzer.js",
+      "file": null,
+      "severity": "WARNING"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "1 console.log statements in enhanced-complexity-analyzer.js",
+      "file": null,
+      "severity": "WARNING"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "20 console.log statements in enhanced-init.js",
+      "file": null,
+      "severity": "WARNING"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "Mismatched try/catch blocks in enhanced-init.js",
+      "file": null,
+      "severity": "WARNING"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "1 console.log statements in reality-based-ui.js",
+      "file": null,
+      "severity": "WARNING"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "Mismatched try/catch blocks in reality-based-ui.js",
+      "file": null,
+      "severity": "WARNING"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "1 console.log statements in search-manager.js",
+      "file": null,
+      "severity": "WARNING"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "43 console.log statements in visualization-manager.js",
+      "file": null,
+      "severity": "WARNING"
+    }
+  ],
+  "info": [
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "Required file found: dashboard.html",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "Required file found: api/server.py",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "Required file found: api/sqlite_backend.py",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "Required file found: assets/dashboard.css",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "Required directory found: components",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "Required directory found: assets",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "Required directory found: api",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "Found 14 JavaScript components",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "  - architectural-layer-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "  - complexity-analyzer.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "  - d3-visualizer.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "  - dashboard-core.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "  - data-loader.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "  - dependency-flow-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "  - domain-analyzer.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "  - enhanced-complexity-analyzer.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "  - enhanced-init.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "  - modal-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "  - navigation-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "  - reality-based-ui.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "  - search-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "FILE_STRUCTURE",
+      "message": "  - visualization-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Found 19 external script references",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "External script: https://cdn.jsdelivr.net/npm/@uswds/uswds@3.8.2/dist/js/uswds-init.min.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "External script: https://cdn.jsdelivr.net/npm/chart.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "External script: https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "External script: https://d3js.org/d3.v7.min.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "External script: https://cdn.jsdelivr.net/npm/@uswds/uswds@3.8.2/dist/js/uswds.min.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Local script found: /components/reality-based-ui.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Local script found: /components/dashboard-core.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Local script found: /components/navigation-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Local script found: /components/data-loader.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Local script found: /components/search-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Local script found: /components/dependency-flow-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Local script found: /components/d3-visualizer.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Local script found: /components/modal-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Local script found: /components/visualization-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Local script found: /components/architectural-layer-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Local script found: /components/complexity-analyzer.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Local script found: /components/enhanced-complexity-analyzer.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Local script found: /components/domain-analyzer.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Local script found: /components/enhanced-init.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Found 2 CSS references",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "External CSS: https://cdn.jsdelivr.net/npm/@uswds/uswds@3.8.2/dist/css/uswds.min.css",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Local CSS found: /assets/dashboard.css",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Found 2 inline scripts",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "Found 55 onclick handlers",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: navigationManager.showSection(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: navigationManager.showSection(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: navigationManager.showSection(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: navigationManager.showSection(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: navigationManager.showSection(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: navigationManager.showSection(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: navigationManager.showSection(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: navigationManager.showSection(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: navigationManager.showSection(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: navigationManager.showSection(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: navigationManager.showSection(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: navigationManager.showSection(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: document.getElementById(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: visualizationManager.showClassInheritanceGraph(true)",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: visualizationManager.showImportDependencies(true)",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: enhancedComplexityAnalyzer.init()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dashboard.loadFiles()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dashboard.loadHighComplexityFiles()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dashboard.applyComplexityFilter(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dashboard.applyComplexityFilter(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dashboard.loadFilesByDomain()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dashboard.refreshAllData()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dashboard.loadClasses()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dashboard.loadServiceClasses()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dashboard.applyClassTypeFilter(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dashboard.applyClassTypeFilter(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: visualizationManager.showClassInheritanceGraph(true)",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dashboard.loadFunctions()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dashboard.loadAsyncFunctions()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dashboard.applyAsyncFilter(false)",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dashboard.applyParameterFilter(",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: visualizationManager.showFunctionCallGraph()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dashboard.loadServices()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dashboard.loadServicesByDomain()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: visualizationManager.showClassInheritanceGraph(false)",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: visualizationManager.showClassInheritanceGraph(true)",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: visualizationManager.showImportDependencies(false)",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: visualizationManager.showImportDependencies(true)",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: visualizationManager.showFunctionCallGraph()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: visualizationManager.showModuleDependencies()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: visualizationManager.showExternalLibraries()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: visualizationManager.debugExternalLibraries()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: dependencyFlowManager.showSampleFlow()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: architecturalLayerManager.showArchitectureOverview()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: architecturalLayerManager.showLayerDiagram()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: architecturalLayerManager.showComponentMap()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: complexityAnalyzer.showComplexityOverview()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: complexityAnalyzer.showHighComplexityFiles()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: complexityAnalyzer.showComplexityTrends()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: enhancedComplexityAnalyzer.init()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: domainAnalyzer.showDomainOverview()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: domainAnalyzer.showDomainDetails()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: domainAnalyzer.showCrossDomainDependencies()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: closeHelpModal()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "HTML",
+      "message": "  - onclick: toggleHelpModal()",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "Analyzing architectural-layer-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "8 await calls in architectural-layer-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Functions: 0",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Classes: 7",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Constants: 33",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/files?limit=5000",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/files?limit=1000",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/files?limit=5000",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "Analyzing complexity-analyzer.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "5 await calls in complexity-analyzer.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Functions: 0",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Classes: 1",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Constants: 20",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/files?limit=5000",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "Analyzing d3-visualizer.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "2 await calls in d3-visualizer.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Functions: 0",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Classes: 5",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Constants: 30",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "Analyzing dashboard-core.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "35 await calls in dashboard-core.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Functions: 2",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Classes: 1",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Constants: 87",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/stats",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/classes?limit=1",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/functions?limit=1",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/files?limit=1000",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/files?limit=5000",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "Analyzing data-loader.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "12 await calls in data-loader.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Functions: 0",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Classes: 3",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Constants: 52",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/files?limit=5000",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/classes?limit=5000",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/functions?limit=5000",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/services?limit=5000",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "Analyzing dependency-flow-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "20 await calls in dependency-flow-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Functions: 0",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Classes: 10",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Constants: 34",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/files?limit=1000",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/files?limit=1",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "Analyzing domain-analyzer.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "5 await calls in domain-analyzer.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Functions: 0",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Classes: 1",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Constants: 27",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/files?limit=5000",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "Analyzing enhanced-complexity-analyzer.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "3 await calls in enhanced-complexity-analyzer.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Functions: 0",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Classes: 1",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Constants: 27",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "Analyzing enhanced-init.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "4 await calls in enhanced-init.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Functions: 2",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Classes: 2",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Constants: 12",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "Analyzing modal-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "11 await calls in modal-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Functions: 0",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Classes: 9",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Constants: 37",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "Analyzing navigation-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "6 await calls in navigation-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Functions: 0",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Classes: 1",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Constants: 14",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "Analyzing reality-based-ui.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Functions: 1",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Classes: 1",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Constants: 24",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "Analyzing search-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "2 await calls in search-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Functions: 0",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Classes: 1",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Constants: 10",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "Analyzing visualization-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "20 await calls in visualization-manager.js",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Functions: 0",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Classes: 11",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - Constants: 66",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/classes?limit=5000",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/files?limit=100",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/functions?limit=100",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/files?limit=100",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/files?limit=200",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "JAVASCRIPT",
+      "message": "  - API call: /api/files?limit=10",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "CSS",
+      "message": "Found 43 unique CSS custom properties",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "CSS",
+      "message": "Found 277 CSS rules",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "CSS",
+      "message": "Found 9 media queries",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "SERVER",
+      "message": "server.py: 26 imports, 30 classes, 1 functions",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "BACKEND",
+      "message": "sqlite_backend.py: 17 imports, 16 classes, 32 functions",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "SERVER",
+      "message": "\u2705 / - Status: 200",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "SERVER",
+      "message": "\u2705 /health - Status: 200",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "SERVER",
+      "message": "\u2705 /api/stats - Status: 200",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "SERVER",
+      "message": "  - API response successful",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "SERVER",
+      "message": "\u2705 /api/files?limit=1 - Status: 200",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "SERVER",
+      "message": "  - API response successful",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "SERVER",
+      "message": "\u2705 /api/classes?limit=1 - Status: 200",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "SERVER",
+      "message": "  - API response successful",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "SERVER",
+      "message": "\u2705 /api/functions?limit=1 - Status: 200",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "SERVER",
+      "message": "  - API response successful",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "DATABASE",
+      "message": "Database file found: D:\\VS Code Projects\\USASpendingv4\\docs\\interactive-documentation-suite\\documentation.db",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "DATABASE",
+      "message": "Found 36 tables: files, sqlite_sequence, models, relationships, domains, annotations, change_log, files_fts_data, files_fts_idx, files_fts_docsize, files_fts_config, models_fts_data, models_fts_idx, models_fts_docsize, models_fts_config, classes, functions, imports, decorators, variables, architectural_layers, components, enhanced_relationships, classes_fts_data, classes_fts_idx, classes_fts_docsize, classes_fts_config, functions_fts_data, functions_fts_idx, functions_fts_docsize, functions_fts_config, sqlite_stat1, files_fts, models_fts, classes_fts, functions_fts",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "DATABASE",
+      "message": "Table files: 536 records",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "DATABASE",
+      "message": "Table classes: 896 records",
+      "file": null,
+      "severity": "INFO"
+    },
+    {
+      "category": "DATABASE",
+      "message": "Table functions: 3261 records",
+      "file": null,
+      "severity": "INFO"
+    }
+  ],
+  "summary": {
+    "total_issues": 0,
+    "total_warnings": 13,
+    "total_info": 213,
+    "categories": {
+      "JAVASCRIPT": [
+        {
+          "category": "JAVASCRIPT",
+          "message": "3 console.log statements in complexity-analyzer.js",
+          "file": null,
+          "severity": "WARNING"
+        },
+        {
+          "category": "JAVASCRIPT",
+          "message": "3 console.log statements in d3-visualizer.js",
+          "file": null,
+          "severity": "WARNING"
+        },
+        {
+          "category": "JAVASCRIPT",
+          "message": "7 console.log statements in dashboard-core.js",
+          "file": null,
+          "severity": "WARNING"
+        },
+        {
+          "category": "JAVASCRIPT",
+          "message": "23 console.log statements in data-loader.js",
+          "file": null,
+          "severity": "WARNING"
+        },
+        {
+          "category": "JAVASCRIPT",
+          "message": "4 console.log statements in dependency-flow-manager.js",
+          "file": null,
+          "severity": "WARNING"
+        },
+        {
+          "category": "JAVASCRIPT",
+          "message": "3 console.log statements in domain-analyzer.js",
+          "file": null,
+          "severity": "WARNING"
+        },
+        {
+          "category": "JAVASCRIPT",
+          "message": "1 console.log statements in enhanced-complexity-analyzer.js",
+          "file": null,
+          "severity": "WARNING"
+        },
+        {
+          "category": "JAVASCRIPT",
+          "message": "20 console.log statements in enhanced-init.js",
+          "file": null,
+          "severity": "WARNING"
+        },
+        {
+          "category": "JAVASCRIPT",
+          "message": "Mismatched try/catch blocks in enhanced-init.js",
+          "file": null,
+          "severity": "WARNING"
+        },
+        {
+          "category": "JAVASCRIPT",
+          "message": "1 console.log statements in reality-based-ui.js",
+          "file": null,
+          "severity": "WARNING"
+        },
+        {
+          "category": "JAVASCRIPT",
+          "message": "Mismatched try/catch blocks in reality-based-ui.js",
+          "file": null,
+          "severity": "WARNING"
+        },
+        {
+          "category": "JAVASCRIPT",
+          "message": "1 console.log statements in search-manager.js",
+          "file": null,
+          "severity": "WARNING"
+        },
+        {
+          "category": "JAVASCRIPT",
+          "message": "43 console.log statements in visualization-manager.js",
+          "file": null,
+          "severity": "WARNING"
+        }
+      ]
+    }
+  }
+}

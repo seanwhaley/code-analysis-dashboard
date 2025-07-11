@@ -1,0 +1,231 @@
+2025-07-10 21:27:39,968 - __main__ - INFO - [code_analyzer.py:62] - 🔍 Initialized CodeAnalyzer for D:\VS Code Projects\USASpendingv4\code-intelligence-dashboard
+2025-07-10 21:27:39,969 - __main__ - INFO - [code_analyzer.py:63] - 📊 Database path: D:\VS Code Projects\USASpendingv4\code-intelligence-dashboard\api\documentation.db
+2025-07-10 21:27:39,969 - __main__ - INFO - [code_analyzer.py:67] - 🚀 Starting project analysis...
+2025-07-10 21:27:39,969 - __main__ - INFO - [code_analyzer.py:71] - 🧹 Clearing existing database data...
+2025-07-10 21:27:39,975 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: .git
+2025-07-10 21:27:39,981 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed .git (ID: 1)
+2025-07-10 21:27:39,982 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: .github\workflows\codeql.yml
+2025-07-10 21:27:39,988 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed .github\workflows\codeql.yml (ID: 2)
+2025-07-10 21:27:39,989 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: .gitignore
+2025-07-10 21:27:39,995 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed .gitignore (ID: 3)
+2025-07-10 21:27:39,995 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: analysis_report.json
+2025-07-10 21:27:40,001 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed analysis_report.json (ID: 4)
+2025-07-10 21:27:40,002 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: api\.gitkeep
+2025-07-10 21:27:40,008 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed api\.gitkeep (ID: 5)
+2025-07-10 21:27:40,008 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: api\server.py
+2025-07-10 21:27:40,090 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed api\server.py (ID: 6)
+2025-07-10 21:27:40,091 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: api\sqlite_backend.py
+2025-07-10 21:27:40,180 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed api\sqlite_backend.py (ID: 7)
+2025-07-10 21:27:40,181 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: assets\.gitkeep
+2025-07-10 21:27:40,186 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed assets\.gitkeep (ID: 8)
+2025-07-10 21:27:40,186 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: assets\dashboard.css
+2025-07-10 21:27:40,193 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed assets\dashboard.css (ID: 9)
+2025-07-10 21:27:40,194 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: components\.gitkeep
+2025-07-10 21:27:40,199 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed components\.gitkeep (ID: 10)
+2025-07-10 21:27:40,199 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: components\architectural-layer-manager.js
+2025-07-10 21:27:40,216 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed components\architectural-layer-manager.js (ID: 11)
+2025-07-10 21:27:40,217 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: components\complexity-analyzer.js
+2025-07-10 21:27:40,234 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed components\complexity-analyzer.js (ID: 12)
+2025-07-10 21:27:40,234 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: components\d3-visualizer.js
+2025-07-10 21:27:40,245 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed components\d3-visualizer.js (ID: 13)
+2025-07-10 21:27:40,246 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: components\dashboard-core.js
+2025-07-10 21:27:40,265 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed components\dashboard-core.js (ID: 14)
+2025-07-10 21:27:40,266 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: components\data-loader.js
+2025-07-10 21:27:40,285 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed components\data-loader.js (ID: 15)
+2025-07-10 21:27:40,285 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: components\dependency-flow-manager.js
+2025-07-10 21:27:40,300 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed components\dependency-flow-manager.js (ID: 16)
+2025-07-10 21:27:40,300 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: components\domain-analyzer.js
+2025-07-10 21:27:40,321 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed components\domain-analyzer.js (ID: 17)
+2025-07-10 21:27:40,321 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: components\enhanced-complexity-analyzer.js
+2025-07-10 21:27:40,334 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed components\enhanced-complexity-analyzer.js (ID: 18)
+2025-07-10 21:27:40,335 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: components\enhanced-init.js
+2025-07-10 21:27:40,349 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed components\enhanced-init.js (ID: 19)
+2025-07-10 21:27:40,350 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: components\modal-manager.js
+2025-07-10 21:27:40,377 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed components\modal-manager.js (ID: 20)
+2025-07-10 21:27:40,377 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: components\navigation-manager.js
+2025-07-10 21:27:40,387 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed components\navigation-manager.js (ID: 21)
+2025-07-10 21:27:40,388 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: components\reality-based-ui.js
+2025-07-10 21:27:40,399 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed components\reality-based-ui.js (ID: 22)
+2025-07-10 21:27:40,399 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: components\search-manager.js
+2025-07-10 21:27:40,409 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed components\search-manager.js (ID: 23)
+2025-07-10 21:27:40,409 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: components\visualization-manager.js
+2025-07-10 21:27:40,436 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed components\visualization-manager.js (ID: 24)
+2025-07-10 21:27:40,437 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: dashboard.html
+2025-07-10 21:27:40,444 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed dashboard.html (ID: 25)
+2025-07-10 21:27:40,444 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: docs\.gitkeep
+2025-07-10 21:27:40,450 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed docs\.gitkeep (ID: 26)
+2025-07-10 21:27:40,450 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: docs\AI_AGENT_COMPLETION_PROMPT.txt
+2025-07-10 21:27:40,456 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed docs\AI_AGENT_COMPLETION_PROMPT.txt (ID: 27)
+2025-07-10 21:27:40,456 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: docs\ASYNC_OPTIMIZATION_SUMMARY.md
+2025-07-10 21:27:40,462 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed docs\ASYNC_OPTIMIZATION_SUMMARY.md (ID: 28)
+2025-07-10 21:27:40,462 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: docs\complete_layout_validation_report.md
+2025-07-10 21:27:40,468 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed docs\complete_layout_validation_report.md (ID: 29)
+2025-07-10 21:27:40,469 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: docs\comprehensive_validation_report.md
+2025-07-10 21:27:40,474 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed docs\comprehensive_validation_report.md (ID: 30)
+2025-07-10 21:27:40,475 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: docs\DASHBOARD_TEST_SUMMARY.md
+2025-07-10 21:27:40,487 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed docs\DASHBOARD_TEST_SUMMARY.md (ID: 31)
+2025-07-10 21:27:40,488 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: docs\FINAL_STATUS.md
+2025-07-10 21:27:40,504 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed docs\FINAL_STATUS.md (ID: 32)
+2025-07-10 21:27:40,504 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: docs\LAYOUT_FIX_SUMMARY.md
+2025-07-10 21:27:40,520 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed docs\LAYOUT_FIX_SUMMARY.md (ID: 33)
+2025-07-10 21:27:40,520 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: docs\LAYOUT_VALIDATION_GUIDE.md
+2025-07-10 21:27:40,528 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed docs\LAYOUT_VALIDATION_GUIDE.md (ID: 34)
+2025-07-10 21:27:40,529 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: docs\LAYOUT_VALIDATION_SUMMARY.md
+2025-07-10 21:27:40,537 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed docs\LAYOUT_VALIDATION_SUMMARY.md (ID: 35)
+2025-07-10 21:27:40,538 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: docs\quick_layout_validation.md
+2025-07-10 21:27:40,546 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed docs\quick_layout_validation.md (ID: 36)
+2025-07-10 21:27:40,547 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: docs\README.md
+2025-07-10 21:27:40,554 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed docs\README.md (ID: 37)
+2025-07-10 21:27:40,555 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: docs\visual_testing_report.md
+2025-07-10 21:27:40,562 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed docs\visual_testing_report.md (ID: 38)
+2025-07-10 21:27:40,562 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: README.md
+2025-07-10 21:27:40,569 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed README.md (ID: 39)
+2025-07-10 21:27:40,569 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: robots.txt
+2025-07-10 21:27:40,575 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed robots.txt (ID: 40)
+2025-07-10 21:27:40,576 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: src\code_analyzer.py
+2025-07-10 21:27:40,636 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed src\code_analyzer.py (ID: 41)
+2025-07-10 21:27:40,637 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: src\comprehensive_dashboard_test.py
+2025-07-10 21:27:40,677 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed src\comprehensive_dashboard_test.py (ID: 42)
+2025-07-10 21:27:40,677 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: src\dashboard_maintenance.py
+2025-07-10 21:27:40,726 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed src\dashboard_maintenance.py (ID: 43)
+2025-07-10 21:27:40,727 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: src\dashboard_test_suite.py
+2025-07-10 21:27:40,772 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed src\dashboard_test_suite.py (ID: 44)
+2025-07-10 21:27:40,773 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: src\dashboard_validator.py
+2025-07-10 21:27:40,812 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed src\dashboard_validator.py (ID: 45)
+2025-07-10 21:27:40,813 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: src\launch.py
+2025-07-10 21:27:40,830 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed src\launch.py (ID: 46)
+2025-07-10 21:27:40,831 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: temp\comprehensive_code_review_2025-07-10.md
+2025-07-10 21:27:40,836 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed temp\comprehensive_code_review_2025-07-10.md (ID: 47)
+2025-07-10 21:27:40,837 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: temp\dashboard_detailed_audit_report_2025-07-09.md
+2025-07-10 21:27:40,842 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed temp\dashboard_detailed_audit_report_2025-07-09.md (ID: 48)
+2025-07-10 21:27:40,842 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: temp\FINAL_IMPLEMENTATION_REPORT_2025-07-10.md
+2025-07-10 21:27:40,848 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed temp\FINAL_IMPLEMENTATION_REPORT_2025-07-10.md (ID: 49)
+2025-07-10 21:27:40,849 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: temp\FINAL_VALIDATION_SUMMARY.md
+2025-07-10 21:27:40,855 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed temp\FINAL_VALIDATION_SUMMARY.md (ID: 50)
+2025-07-10 21:27:40,855 - __main__ - DEBUG - [code_analyzer.py:127] - 🔍 Analyzing file: temp\FIXES_IMPLEMENTED.md
+2025-07-10 21:27:40,861 - __main__ - DEBUG - [code_analyzer.py:177] - ✅ Processed temp\FIXES_IMPLEMENTED.md (ID: 51)
+2025-07-10 21:27:40,867 - __main__ - INFO - [code_analyzer.py:829] - ✅ Domain statistics updated
+2025-07-10 21:27:40,869 - __main__ - INFO - [code_analyzer.py:84] - ✅ Project analysis completed successfully!
+2025-07-10 21:27:40,869 - __main__ - INFO - [code_analyzer.py:85] - 📊 Final Statistics: {'total_files': 51, 'total_classes': 0, 'total_functions': 0, 'total_imports': 0, 'total_models': 0, 'total_relationships': 0, 'total_decorators': 0, 'total_variables': 0, 'avg_complexity': 36.3, 'total_domains': 6, 'files_processed': 51, 'classes_found': 63, 'functions_found': 136, 'imports_found': 96, 'decorators_found': 0, 'variables_found': 0, 'errors': 0}
+2025-07-10 21:28:16,204 - asyncio - DEBUG - [proactor_events.py:631] - Using proactor: IocpProactor
+2025-07-10 21:28:29,377 - asyncio - DEBUG - [proactor_events.py:631] - Using proactor: IocpProactor
+2025-07-10 21:28:31,978 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/assets/dashboard.css
+2025-07-10 21:28:31,979 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/components/reality-based-ui.js
+2025-07-10 21:28:32,036 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/assets/dashboard.css -> 200 (57.8ms)
+2025-07-10 21:28:32,037 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/components/reality-based-ui.js -> 200 (57.7ms)
+2025-07-10 21:28:32,040 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/components/dashboard-core.js
+2025-07-10 21:28:32,040 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/components/navigation-manager.js
+2025-07-10 21:28:32,042 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/components/navigation-manager.js -> 200 (1.5ms)
+2025-07-10 21:28:32,042 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/components/dashboard-core.js -> 200 (2.2ms)
+2025-07-10 21:28:32,052 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/components/data-loader.js
+2025-07-10 21:28:32,053 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/components/search-manager.js
+2025-07-10 21:28:32,054 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/components/search-manager.js -> 200 (1.7ms)
+2025-07-10 21:28:32,055 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/components/data-loader.js -> 200 (2.5ms)
+2025-07-10 21:28:32,058 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/components/dependency-flow-manager.js
+2025-07-10 21:28:32,058 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/components/d3-visualizer.js
+2025-07-10 21:28:32,060 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/components/d3-visualizer.js -> 200 (1.6ms)
+2025-07-10 21:28:32,060 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/components/dependency-flow-manager.js -> 200 (2.3ms)
+2025-07-10 21:28:32,063 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/components/modal-manager.js
+2025-07-10 21:28:32,064 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/components/visualization-manager.js
+2025-07-10 21:28:32,065 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/components/modal-manager.js -> 200 (2.4ms)
+2025-07-10 21:28:32,066 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/components/visualization-manager.js -> 200 (1.9ms)
+2025-07-10 21:28:32,083 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/components/architectural-layer-manager.js
+2025-07-10 21:28:32,084 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/components/complexity-analyzer.js
+2025-07-10 21:28:32,084 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/components/enhanced-complexity-analyzer.js
+2025-07-10 21:28:32,086 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/components/architectural-layer-manager.js -> 200 (3.0ms)
+2025-07-10 21:28:32,087 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/components/enhanced-complexity-analyzer.js -> 200 (3.0ms)
+2025-07-10 21:28:32,088 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/components/complexity-analyzer.js -> 200 (3.6ms)
+2025-07-10 21:28:32,090 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/components/domain-analyzer.js
+2025-07-10 21:28:32,092 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/components/enhanced-init.js
+2025-07-10 21:28:32,093 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/components/domain-analyzer.js -> 200 (2.6ms)
+2025-07-10 21:28:32,094 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/components/enhanced-init.js -> 200 (2.5ms)
+2025-07-10 21:28:32,203 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/files?limit=1000
+2025-07-10 21:28:32,204 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1000'}
+2025-07-10 21:28:32,207 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/files?limit=1000 -> 200 (3.6ms)
+2025-07-10 21:28:32,207 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/stats
+2025-07-10 21:28:32,210 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/stats -> 200 (2.4ms)
+2025-07-10 21:28:32,211 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/stats
+2025-07-10 21:28:32,212 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/stats -> 200 (0.6ms)
+2025-07-10 21:28:32,412 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/classes?limit=1
+2025-07-10 21:28:32,413 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:28:32,416 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/classes?limit=1 -> 200 (3.4ms)
+2025-07-10 21:28:32,418 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/classes?limit=1
+2025-07-10 21:28:32,418 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:28:32,420 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/classes?limit=1 -> 200 (2.3ms)
+2025-07-10 21:28:32,447 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/functions?limit=1
+2025-07-10 21:28:32,447 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:28:32,450 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/functions?limit=1 -> 200 (3.1ms)
+2025-07-10 21:28:32,452 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/functions?limit=1
+2025-07-10 21:28:32,452 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:28:32,454 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/functions?limit=1 -> 200 (2.6ms)
+2025-07-10 21:28:32,457 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/files?limit=1000
+2025-07-10 21:28:32,457 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1000'}
+2025-07-10 21:28:32,460 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/files?limit=1000 -> 200 (2.8ms)
+2025-07-10 21:28:32,462 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/files?limit=1000
+2025-07-10 21:28:32,462 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1000'}
+2025-07-10 21:28:32,466 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/files?limit=1000 -> 200 (4.4ms)
+2025-07-10 21:28:32,467 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/files?limit=5000
+2025-07-10 21:28:32,467 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '5000'}
+2025-07-10 21:28:32,470 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/files?limit=5000 -> 200 (3.1ms)
+2025-07-10 21:28:32,472 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/files?limit=5000
+2025-07-10 21:28:32,472 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '5000'}
+2025-07-10 21:28:32,475 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/files?limit=5000 -> 200 (2.8ms)
+2025-07-10 21:28:32,477 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/files?limit=5000
+2025-07-10 21:28:32,477 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '5000'}
+2025-07-10 21:28:32,480 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/files?limit=5000 -> 200 (3.1ms)
+2025-07-10 21:28:32,984 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/stats
+2025-07-10 21:28:32,984 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/stats -> 200 (0.5ms)
+2025-07-10 21:28:32,986 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/stats
+2025-07-10 21:28:32,986 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/stats -> 200 (0.7ms)
+2025-07-10 21:28:32,988 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/classes?limit=1
+2025-07-10 21:28:32,988 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:28:32,991 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/classes?limit=1 -> 200 (2.9ms)
+2025-07-10 21:28:33,037 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/classes?limit=1
+2025-07-10 21:28:33,038 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:28:33,041 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/classes?limit=1 -> 200 (3.8ms)
+2025-07-10 21:28:33,042 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/functions?limit=1
+2025-07-10 21:28:33,042 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:28:33,046 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/functions?limit=1 -> 200 (4.4ms)
+2025-07-10 21:28:33,046 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/stats
+2025-07-10 21:28:33,048 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/stats -> 200 (1.6ms)
+2025-07-10 21:28:33,051 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/functions?limit=1
+2025-07-10 21:28:33,051 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:28:33,054 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/stats
+2025-07-10 21:28:33,055 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/functions?limit=1 -> 200 (4.0ms)
+2025-07-10 21:28:33,055 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/stats -> 200 (1.1ms)
+2025-07-10 21:28:33,056 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/classes?limit=1
+2025-07-10 21:28:33,056 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:28:33,060 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/classes?limit=1 -> 200 (4.5ms)
+2025-07-10 21:28:33,065 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/classes?limit=1
+2025-07-10 21:28:33,065 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:28:33,068 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/classes?limit=1 -> 200 (3.2ms)
+2025-07-10 21:28:33,071 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/functions?limit=1
+2025-07-10 21:28:33,071 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:28:33,074 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/functions?limit=1 -> 200 (3.2ms)
+2025-07-10 21:28:33,077 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/functions?limit=1
+2025-07-10 21:28:33,077 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:28:33,079 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/functions?limit=1 -> 200 (2.5ms)
+2025-07-10 21:31:38,679 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:31:38,679 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.7ms)
+2025-07-10 21:31:38,681 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:31:38,682 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.6ms)
+2025-07-10 21:31:38,683 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:31:38,683 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:31:38,685 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (2.1ms)
+2025-07-10 21:31:38,687 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:31:38,687 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:31:38,689 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (2.2ms)
+2025-07-10 21:31:38,689 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:31:38,689 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:31:38,692 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (2.7ms)
+2025-07-10 21:31:38,694 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:31:38,694 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:31:38,696 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (2.1ms)
+2025-07-10 21:31:38,787 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:31:38,788 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.7ms)
+2025-07-10 21:31:38,791 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:31:38,791 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:31:38,793 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (2.2ms)
+2025-07-10 21:31:38,796 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:31:38,797 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:31:38,799 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (3.2ms)
