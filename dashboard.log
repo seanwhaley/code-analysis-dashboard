@@ -229,3 +229,178 @@
 2025-07-10 21:31:38,796 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
 2025-07-10 21:31:38,797 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
 2025-07-10 21:31:38,799 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (3.2ms)
+2025-07-10 21:33:45,992 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/stats
+2025-07-10 21:33:45,994 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/stats -> 200 (2.1ms)
+2025-07-10 21:36:38,672 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:36:38,673 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.7ms)
+2025-07-10 21:36:38,675 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:36:38,675 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.4ms)
+2025-07-10 21:36:38,676 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:36:38,677 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:36:38,678 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (2.1ms)
+2025-07-10 21:36:38,680 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:36:38,680 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:36:38,682 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (2.1ms)
+2025-07-10 21:36:38,685 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:36:38,685 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:36:38,687 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (2.3ms)
+2025-07-10 21:36:38,689 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:36:38,689 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:36:38,691 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (1.7ms)
+2025-07-10 21:36:38,794 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:36:38,794 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.6ms)
+2025-07-10 21:36:38,797 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:36:38,797 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:36:38,799 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (1.7ms)
+2025-07-10 21:36:38,801 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:36:38,801 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:36:38,802 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (1.8ms)
+2025-07-10 21:41:38,678 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:41:38,680 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (2.2ms)
+2025-07-10 21:41:38,682 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:41:38,682 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.4ms)
+2025-07-10 21:41:38,683 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:41:38,683 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:41:38,685 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (2.0ms)
+2025-07-10 21:41:38,687 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:41:38,687 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:41:38,689 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (2.0ms)
+2025-07-10 21:41:38,689 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:41:38,689 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:41:38,692 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (2.5ms)
+2025-07-10 21:41:38,693 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:41:38,694 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:41:38,695 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (2.0ms)
+2025-07-10 21:41:38,801 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:41:38,802 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.5ms)
+2025-07-10 21:41:38,804 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:41:38,804 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:41:38,806 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (1.7ms)
+2025-07-10 21:41:38,808 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:41:38,808 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:41:38,810 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (1.8ms)
+2025-07-10 21:45:10,254 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/files?limit=5
+2025-07-10 21:45:10,254 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '5'}
+2025-07-10 21:45:10,256 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/files?limit=5 -> 200 (2.3ms)
+2025-07-10 21:46:03,112 - api.server - DEBUG - [server.py:380] - 🔍 GET http://localhost:8001/api/classes?limit=5
+2025-07-10 21:46:03,112 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '5'}
+2025-07-10 21:46:03,114 - api.server - DEBUG - [server.py:390] - ✅ GET http://localhost:8001/api/classes?limit=5 -> 200 (2.6ms)
+2025-07-10 21:46:38,677 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:46:38,678 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.6ms)
+2025-07-10 21:46:38,680 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:46:38,682 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (2.1ms)
+2025-07-10 21:46:38,683 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:46:38,683 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:46:38,685 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (2.2ms)
+2025-07-10 21:46:38,686 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:46:38,687 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:46:38,688 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (1.8ms)
+2025-07-10 21:46:38,689 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:46:38,689 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:46:38,691 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (2.3ms)
+2025-07-10 21:46:38,692 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:46:38,693 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:46:38,694 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (1.9ms)
+2025-07-10 21:46:38,799 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:46:38,800 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.5ms)
+2025-07-10 21:46:38,802 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:46:38,802 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:46:38,804 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (1.8ms)
+2025-07-10 21:46:38,806 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:46:38,806 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:46:38,808 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (1.9ms)
+2025-07-10 21:51:38,687 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:51:38,689 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (2.4ms)
+2025-07-10 21:51:38,691 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:51:38,692 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.7ms)
+2025-07-10 21:51:38,693 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:51:38,694 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:51:38,696 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (2.2ms)
+2025-07-10 21:51:38,697 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:51:38,697 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:51:38,699 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (2.2ms)
+2025-07-10 21:51:38,700 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:51:38,700 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:51:38,702 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (2.6ms)
+2025-07-10 21:51:38,704 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:51:38,704 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:51:38,706 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (2.1ms)
+2025-07-10 21:51:38,809 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:51:38,809 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.5ms)
+2025-07-10 21:51:38,811 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:51:38,812 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:51:38,813 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (1.9ms)
+2025-07-10 21:51:38,816 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:51:38,816 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:51:38,818 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (1.9ms)
+2025-07-10 21:56:38,684 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:56:38,685 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.8ms)
+2025-07-10 21:56:38,686 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:56:38,687 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.5ms)
+2025-07-10 21:56:38,688 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:56:38,688 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:56:38,690 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (2.2ms)
+2025-07-10 21:56:38,692 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:56:38,692 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:56:38,694 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (2.1ms)
+2025-07-10 21:56:38,694 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:56:38,694 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:56:38,697 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (2.4ms)
+2025-07-10 21:56:38,699 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:56:38,699 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:56:38,701 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (1.9ms)
+2025-07-10 21:56:38,808 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 21:56:38,810 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (2.0ms)
+2025-07-10 21:56:38,812 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 21:56:38,812 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:56:38,815 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (2.5ms)
+2025-07-10 21:56:38,817 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 21:56:38,817 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 21:56:38,819 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (2.1ms)
+2025-07-10 22:01:38,698 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 22:01:38,699 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.7ms)
+2025-07-10 22:01:38,700 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 22:01:38,701 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.4ms)
+2025-07-10 22:01:38,702 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 22:01:38,702 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 22:01:38,704 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (2.0ms)
+2025-07-10 22:01:38,705 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 22:01:38,706 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 22:01:38,707 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (1.9ms)
+2025-07-10 22:01:38,708 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 22:01:38,708 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 22:01:38,710 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (2.0ms)
+2025-07-10 22:01:38,711 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 22:01:38,711 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 22:01:38,713 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (1.9ms)
+2025-07-10 22:01:38,805 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/stats
+2025-07-10 22:01:38,806 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/stats -> 200 (0.5ms)
+2025-07-10 22:01:38,808 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/classes?limit=1
+2025-07-10 22:01:38,808 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 22:01:38,810 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/classes?limit=1 -> 200 (1.9ms)
+2025-07-10 22:01:38,812 - api.server - DEBUG - [server.py:380] - 🔍 GET http://127.0.0.1:8001/api/functions?limit=1
+2025-07-10 22:01:38,812 - api.server - DEBUG - [server.py:382] -    Query params: {'limit': '1'}
+2025-07-10 22:01:38,814 - api.server - DEBUG - [server.py:390] - ✅ GET http://127.0.0.1:8001/api/functions?limit=1 -> 200 (1.8ms)
+2025-07-10 22:52:56,477 - dashboard.app - INFO - Starting Code Intelligence Dashboard
+2025-07-10 22:52:56,477 - dashboard.app - WARNING - Database not found at code_intelligence.db. You'll need to run analysis first.
+2025-07-10 22:52:56,478 - dashboard.views - ERROR - Error refreshing system stats: no such table: files
+2025-07-10 22:52:56,485 - dashboard.app - ERROR - Error creating dashboard: no such table: files
+2025-07-10 22:52:56,920 - dashboard.app - INFO - Starting Code Intelligence Dashboard
+2025-07-10 22:52:56,922 - dashboard.views - ERROR - Error refreshing system stats: no such table: files
+2025-07-10 22:52:56,932 - dashboard.app - ERROR - Error creating dashboard: no such table: files
+2025-07-10 22:52:57,260 - tornado.access - INFO - 200 GET / (::1) 344.55ms
+2025-07-10 22:52:57,358 - tornado.access - INFO - 200 GET /static/extensions/panel/bundled/reactiveesm/es-module-shims@%5E1.10.0/dist/es-module-shims.min.js (::1) 32.05ms
+2025-07-10 22:52:57,494 - tornado.access - INFO - 200 GET /static/extensions/panel/bundled/datatabulator/luxon/build/global/luxon.min.js (::1) 166.69ms
+2025-07-10 22:52:57,497 - tornado.access - INFO - 200 GET /static/js/bokeh-gl.min.js?v=b54508cdec64efe90f845519b087ee3d30088e654c8346faaf0cdaa39b84b3e18bea670698131113df8641cc8373257c91bfd713c1121253d83f96713e0e438b (::1) 169.10ms
+2025-07-10 22:52:57,507 - tornado.access - INFO - 200 GET /static/extensions/panel/bundled/datatabulator/tabulator-tables@6.3.1/dist/css/tabulator_simple.min.css?v=1.6.1 (::1) 9.40ms
+2025-07-10 22:52:57,509 - tornado.access - INFO - 200 GET /static/js/bokeh-widgets.min.js?v=a0afa9823db48173257be2b2ce914fdc9f078332a30f9251dd80d067438b2b4e9e4e6a35b5a7be73e9d4515ec7d45137f160d0605fae7b9c92c75780452b149f (::1) 10.81ms
+2025-07-10 22:52:57,511 - tornado.access - INFO - 200 GET /static/js/bokeh-tables.min.js?v=02590f8b521a84dc1078f0190df2558fcd536b6e263c6cd1a41b41e47cfdb4381040035d421c99efbe87521da4e238a632dd1c7f5c4948cb73ab8456ff29ebbe (::1) 12.33ms
+2025-07-10 22:52:57,611 - tornado.access - INFO - 200 GET /static/extensions/panel/bundled/datatabulator/tabulator-tables@6.3.1/dist/js/tabulator.min.js (::1) 283.85ms
+2025-07-10 22:52:57,667 - tornado.access - INFO - 200 GET /static/extensions/panel/panel.min.js?v=fdfe13d50cc583494b0bcd54861b89449ecc2337b3f763041f8334ccbd57d167 (::1) 167.61ms
+2025-07-10 22:52:57,668 - tornado.access - INFO - 200 GET /static/js/bokeh.min.js?v=291ef03c7dc4e3bb836ad5f125fa3bda484b457f16931033684bc9a163fdc1b0cbdd81fc76b36e29afe380dc1a46c6399c910851eaa940eb113aaa8773435f38 (::1) 339.60ms
+2025-07-10 22:52:57,787 - tornado.access - INFO - 101 GET /ws (::1) 0.49ms
+2025-07-10 22:52:57,993 - tornado.access - INFO - 200 GET /static/extensions/panel/images/favicon.ico (::1) 11.23ms
+2025-07-10 22:52:58,007 - tornado.access - INFO - 200 GET /static/extensions/panel/css/loading.css?v=1.6.1 (::1) 13.83ms
+2025-07-10 22:52:58,019 - tornado.access - INFO - 200 GET /static/extensions/panel/bundled/theme/native.css?v=1.6.1 (::1) 10.96ms
+2025-07-10 22:52:58,034 - tornado.access - INFO - 200 GET /static/extensions/panel/css/listpanel.css?v=1.6.1 (::1) 26.38ms
+2025-07-10 22:52:58,043 - tornado.access - INFO - 200 GET /static/extensions/panel/bundled/theme/default.css?v=1.6.1 (::1) 35.07ms
