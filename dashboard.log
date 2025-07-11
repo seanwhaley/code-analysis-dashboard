@@ -1,0 +1,2 @@
+2025-07-10 23:44:43,400 - dashboard.app - INFO - Starting Code Intelligence Dashboard
+2025-07-10 23:44:43,413 - dashboard.app - ERROR - Error creating dashboard: 'str' object has no attribute 'value'
