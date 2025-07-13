@@ -1,0 +1,58 @@
+<!--
+Circular Dependency Analysis HTML Template
+Last Updated: 2025-07-11
+-->
+{% if not circular_dependencies %}
+<div style="background: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; padding: 20px; margin: 20px 0;">
+    <h3 style="color: #155724; margin: 0 0 10px 0;">✅ No Circular Dependencies Found</h3>
+    <p style="color: #155724; margin: 0;">Great! Your codebase doesn't have any circular dependencies.</p>
+</div>
+{% else %}
+<div style="background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 8px; padding: 20px; margin: 20px 0;">
+    <h3 style="color: #721c24; margin: 0 0 15px 0;">⚠️ Circular Dependencies Detected</h3>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+        <div style="text-align: center; padding: 15px; background: white; border-radius: 8px;">
+            <h4 style="margin: 0; color: #dc3545;">Total Cycles</h4>
+            <p style="font-size: 24px; font-weight: bold; margin: 5px 0 0 0;">{{ total_cycles }}</p>
+        </div>
+        <div style="text-align: center; padding: 15px; background: white; border-radius: 8px;">
+            <h4 style="margin: 0; color: #dc3545;">Files Involved</h4>
+            <p style="font-size: 24px; font-weight: bold; margin: 5px 0 0 0;">{{ total_files_involved }}</p>
+        </div>
+        <div style="text-align: center; padding: 15px; background: white; border-radius: 8px;">
+            <h4 style="margin: 0; color: #dc3545;">Largest Cycle</h4>
+            <p style="font-size: 24px; font-weight: bold; margin: 5px 0 0 0;">{{ largest_cycle_size }} files</p>
+        </div>
+    </div>
+</div>
+
+<div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+    <h3 style="margin: 0 0 20px 0; color: #333;">🔄 Circular Dependency Details</h3>
+    {% for cycle in circular_dependencies %}
+    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin: 15px 0;">
+        <h4 style="margin: 0 0 10px 0; color: #dc3545;">Cycle #{{ loop.index }} ({{ cycle.size }} files)</h4>
+        <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; margin: 10px 0;">
+            <strong>Files involved:</strong><br>
+            {{ cycle.file_names | join(' → ') }} → {{ cycle.file_names[0] }}
+        </div>
+        <div style="margin-top: 10px;">
+            <strong>File paths:</strong>
+            <ul style="margin: 5px 0;">
+                {% for path in cycle.file_paths %}
+                <li style='margin: 2px 0;'>{{ path }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px; padding: 10px; margin: 10px 0;">
+            <strong>💡 Recommendation:</strong> Consider refactoring to break this circular dependency by:
+            <ul style="margin: 5px 0;">
+                <li>Extracting common functionality to a separate module</li>
+                <li>Using dependency injection</li>
+                <li>Applying the Dependency Inversion Principle</li>
+            </ul>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}

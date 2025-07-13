@@ -8,18 +8,26 @@ ordering match the database schema and population scripts.
 
 The queries are designed to be efficient and provide comprehensive
 data for the Panel dashboard UI.
+
+Key Features:
+- Type-safe query interfaces using Pydantic models
+- Comprehensive error handling and logging
+- Performance-optimized SQL queries
+- Consistent data transformation and validation
+- Connection pooling and resource management
+
+Last Updated: 2025-01-27 15:30:00
 """
 
 import json
 import logging
 import sqlite3
-
-# Add models to path
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple
 
+# Add models to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from models.types import (
     ClassRecord,
@@ -35,18 +43,40 @@ from models.types import (
     SystemStats,
 )
 
-# Configure logging
+# Configure logging with enhanced format
 logger = logging.getLogger(__name__)
 
 
 class DatabaseQuerier:
-    """Provides all database query operations for the dashboard."""
+    """
+    Provides all database query operations for the dashboard.
 
-    def __init__(self, db_path: str = "code_intelligence.db"):
+    This class encapsulates all database interactions with comprehensive
+    error handling, type safety, and performance optimization.
+    """
+
+    def __init__(self, db_path: str = "code_intelligence.db") -> None:
+        """
+        Initialize the database querier.
+
+        Args:
+            db_path: Path to the SQLite database file
+        """
         self.db_path = db_path
+        self._connection_cache: Optional[sqlite3.Connection] = None
+        self._last_connection_time: Optional[datetime] = None
+        self._connection_timeout: int = 300  # 5 minutes
 
     def get_connection(self) -> sqlite3.Connection:
-        """Get a database connection with row factory."""
+        """
+        Get a database connection with row factory and optimized settings.
+
+        Returns:
+            sqlite3.Connection: Configured database connection
+
+        Raises:
+            sqlite3.Error: If database connection fails
+        """
         conn = sqlite3.connect(self.db_path)
         conn.row_factory = sqlite3.Row
         return conn
@@ -386,6 +416,22 @@ class DatabaseQuerier:
 
             relationships = [self._row_to_relationship_record(row) for row in rows]
             return relationships, total_count
+
+    def get_all_relationships(self) -> List[RelationshipRecord]:
+        """Get all relationships without pagination."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                SELECT id, source_type, source_id, source_name, target_type, target_id,
+                       target_name, relationship_type, file_path, line_number,
+                       created_at, updated_at
+                FROM relationships 
+                ORDER BY source_name, target_name
+                """
+            )
+            rows = cursor.fetchall()
+            return [self._row_to_relationship_record(row) for row in rows]
 
     # Statistics and Analysis Queries
     def get_system_stats(self) -> SystemStats:

@@ -6,11 +6,15 @@ pydantic-panel>=0.1.0
 
 # Data processing and analysis
 pandas>=2.0.0
+numpy>=1.24.0
 sqlite3  # Built-in Python module
 
 # Code analysis (Python AST)
 ast  # Built-in Python module
 pathlib  # Built-in Python module
+
+# Network analysis and graph algorithms
+networkx>=3.0.0
 
 # Visualization and charting
 bokeh>=3.3.0  # Panel's visualization backend
@@ -23,5 +27,9 @@ pytest-asyncio>=0.21.0
 black>=23.0.0
 mypy>=1.0.0
 
-# Optional: Enhanced visualization
+# Optional: Enhanced visualization and graph layout
 plotly>=5.17.0  # For advanced charts
+pygraphviz>=1.10  # For hierarchical graph layouts (optional)
+
+# Additional utilities
+typing-extensions>=4.0.0  # For enhanced type hints

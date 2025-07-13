@@ -82,7 +82,7 @@ class BaseRecord(BaseModel):
 
     class Config:
         from_attributes = True
-        use_enum_values = True
+        # Removed use_enum_values = True to preserve enum objects
 
 
 # Core Entity Models
@@ -345,6 +345,47 @@ class AnalysisConfigForm(BaseModel):
         return str(path.resolve())
 
 
+class NetworkGraphConfigForm(BaseModel):
+    """Form model for configuring network graph visualization parameters."""
+
+    layout_algorithm: str = Field(
+        default="spring",
+        description="Layout algorithm for positioning nodes",
+        pattern="^(spring|circular|hierarchical|force_atlas)$",
+    )
+    node_size_metric: str = Field(
+        default="degree",
+        description="Metric to determine node size",
+        pattern="^(degree|complexity|lines_of_code|uniform)$",
+    )
+    edge_filter: str = Field(
+        default="all",
+        description="Filter edges by relationship type",
+        pattern="^(all|imports|inherits|calls|uses|contains|depends_on)$",
+    )
+    show_labels: bool = Field(
+        default=False, description="Show file names as labels on nodes"
+    )
+
+    @field_validator("layout_algorithm")
+    @classmethod
+    def validate_layout_algorithm(cls, v: str) -> str:
+        """Validate layout algorithm choice."""
+        valid_algorithms = ["spring", "circular", "hierarchical", "force_atlas"]
+        if v not in valid_algorithms:
+            raise ValueError(f"Layout algorithm must be one of: {valid_algorithms}")
+        return v
+
+    @field_validator("node_size_metric")
+    @classmethod
+    def validate_node_size_metric(cls, v: str) -> str:
+        """Validate node size metric choice."""
+        valid_metrics = ["degree", "complexity", "lines_of_code", "uniform"]
+        if v not in valid_metrics:
+            raise ValueError(f"Node size metric must be one of: {valid_metrics}")
+        return v
+
+
 # Export all models for easy importing
 __all__ = [
     "FileType",
@@ -361,4 +402,5 @@ __all__ = [
     "SystemStats",
     "FileFilterForm",
     "AnalysisConfigForm",
+    "NetworkGraphConfigForm",
 ]

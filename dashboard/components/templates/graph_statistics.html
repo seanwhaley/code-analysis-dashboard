@@ -1,0 +1,19 @@
+<!--
+Graph Statistics HTML Template
+Last Updated: 2025-07-11 14:00:00
+-->
+<div class="graph-stats">
+  <h3>Graph Statistics</h3>
+  <ul>
+    <li><strong>Nodes:</strong> {{ num_nodes }}</li>
+    <li><strong>Edges:</strong> {{ num_edges }}</li>
+    <li><strong>Density:</strong> {{ density }}</li>
+    <li><strong>Top Nodes:</strong>
+      <ul>
+        {% for node in top_nodes_info %}
+          <li>{{ node }}</li>
+        {% endfor %}
+      </ul>
+    </li>
+  </ul>
+</div>

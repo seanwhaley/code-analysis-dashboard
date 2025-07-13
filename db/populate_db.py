@@ -8,11 +8,20 @@ for Python files and basic analysis for other file types.
 
 The population logic is designed to be exactly aligned with the query logic
 to ensure data consistency and integrity.
+
+Key Features:
+- Comprehensive AST analysis for Python files
+- Relationship extraction between code entities
+- Pydantic model detection and classification
+- Domain classification based on file paths
+- Complexity analysis and metrics calculation
+- Robust error handling and progress tracking
+
+Last Updated: 2025-01-27 15:30:00
 """
 
 import ast
 import json
-import logging
 import os
 import sqlite3
 import sys
@@ -22,6 +31,10 @@ from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 # Add models to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
+from dashboard.dashboard_logging import get_logger
+from dashboard.settings import DashboardSettings
+from db.schema_manager import DatabaseSchemaManager
+
 from models.types import (
     ClassRecord,
     ComplexityLevel,
@@ -33,90 +46,84 @@ from models.types import (
     RelationshipType,
 )
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.StreamHandler(),
-        logging.FileHandler("populate_db.log", encoding="utf-8"),
-    ],
-)
-logger = logging.getLogger(__name__)
+# Configure enhanced logging with structured format
+# Logging configuration will be loaded from settings
+logger = get_logger(__name__)
 
 
 class ASTAnalyzer:
-    """Analyzes Python files using AST to extract code structure."""
+    """
+    Analyzes Python files using AST to extract code structure.
 
-    def __init__(self):
-        self.current_file_path = ""
-        self.current_file_id = None
+    This class provides comprehensive analysis of Python source files,
+    extracting classes, functions, relationships, and metrics using
+    the Abstract Syntax Tree representation.
+    """
+
+    def __init__(self, settings: Optional[DashboardSettings] = None) -> None:
+        """Initialize the AST analyzer with tracking state."""
+        if settings is None:
+            try:
+                settings = DashboardSettings.from_yaml()
+            except Exception as e:
+                logger.warning(f"Could not load settings, using defaults: {e}")
+                settings = DashboardSettings()
+
+        self.settings = settings
+        self.current_file_path: str = ""
+        self.current_file_id: Optional[int] = None
+        self.analysis_cache: Dict[str, Any] = {}
+        self.error_count: int = 0
+        self.success_count: int = 0
 
     def analyze_file(
         self, file_path: Path
     ) -> Tuple[
         FileRecord, List[ClassRecord], List[FunctionRecord], List[RelationshipRecord]
     ]:
-        """Analyze a Python file and extract all code entities."""
+        """
+        Analyze a Python file and extract all code entities.
+
+        Args:
+            file_path: Path to the Python file to analyze
+
+        Returns:
+            Tuple containing file record, classes, functions, and relationships
+
+        Raises:
+            Various exceptions are caught and logged, returning minimal records on error
+        """
         self.current_file_path = str(file_path)
+        logger.debug(f"Starting analysis of file: {file_path}")
 
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
-                content = f.read()
+            # Read file content with encoding detection fallback
+            content = self._read_file_content(file_path)
 
-            # Parse AST
-            tree = ast.parse(content, filename=str(file_path))
+            # Parse AST with enhanced error reporting
+            tree = self._parse_ast_safely(content, file_path)
+            if tree is None:
+                return self._create_error_file_record(file_path), [], [], []
 
             # Extract file-level information
             file_record = self._extract_file_info(file_path, content, tree)
 
-            # Extract classes and functions
-            classes = []
-            functions = []
-            relationships = []
+            # Extract classes and functions with progress tracking
+            classes, functions, relationships = self._extract_code_entities(
+                tree, file_path
+            )
 
-            for node in ast.walk(tree):
-                if isinstance(node, ast.ClassDef):
-                    class_record = self._extract_class_info(node, file_path)
-                    classes.append(class_record)
-
-                    # Extract methods from the class
-                    for item in node.body:
-                        if isinstance(item, ast.FunctionDef) or isinstance(
-                            item, ast.AsyncFunctionDef
-                        ):
-                            method_record = self._extract_function_info(
-                                item, file_path, class_name=node.name
-                            )
-                            functions.append(method_record)
-
-                elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                    # Only top-level functions (not methods)
-                    if self._is_top_level_function(node, tree):
-                        function_record = self._extract_function_info(node, file_path)
-                        functions.append(function_record)
-
-            # Extract relationships
-            relationships.extend(self._extract_relationships(tree, file_path))
+            self.success_count += 1
+            logger.debug(
+                f"Successfully analyzed {file_path}: {len(classes)} classes, {len(functions)} functions"
+            )
 
             return file_record, classes, functions, relationships
 
         except Exception as e:
-            logger.error(f"Error analyzing file {file_path}: {e}")
-            # Return minimal file record on error
-            file_record = FileRecord(
-                name=file_path.name,
-                path=self._get_relative_path(file_path),
-                domain=self._classify_domain(file_path),
-                file_type=self._classify_file_type(file_path),
-                complexity=0,
-                lines_of_code=0,
-                classes_count=0,
-                functions_count=0,
-                imports_count=0,
-                pydantic_models_count=0,
-            )
-            return file_record, [], [], []
+            self.error_count += 1
+            logger.error(f"Error analyzing file {file_path}: {e}", exc_info=True)
+            return self._create_error_file_record(file_path), [], [], []
 
     def _get_relative_path(self, file_path: Path) -> str:
         """Get relative path, handling cases where file is outside current directory."""
@@ -127,19 +134,12 @@ class ASTAnalyzer:
             return file_path.name
 
     def _get_relative_path_to_root(self, file_path: Path, root_path: Path) -> str:
-        """Get relative path to a specific root, handling cases where file is outside root."""
+        """Get relative path from root, handling different path formats."""
         try:
             return str(file_path.relative_to(root_path)).replace("\\", "/")
         except ValueError:
-            # File is outside root directory, try to preserve some path structure
-            # by using the last few parts of the path
-            parts = file_path.parts
-            if len(parts) >= 3:
-                return "/".join(parts[-3:])
-            elif len(parts) >= 2:
-                return "/".join(parts[-2:])
-            else:
-                return file_path.name
+            # If file_path is not relative to root_path, return absolute path
+            return str(file_path).replace("\\", "/")
 
     def _extract_file_info(
         self, file_path: Path, content: str, tree: ast.AST
@@ -272,6 +272,9 @@ class ASTAnalyzer:
         self, tree: ast.AST, file_path: Path
     ) -> List[RelationshipRecord]:
         """Extract relationships between code entities."""
+        if not self.settings.ast_analysis.enable_relationship_extraction:
+            return []
+
         relationships = []
 
         for node in ast.walk(tree):
@@ -366,6 +369,9 @@ class ASTAnalyzer:
 
     def _count_pydantic_models(self, tree: ast.AST) -> int:
         """Count Pydantic models in the AST."""
+        if not self.settings.ast_analysis.enable_pydantic_detection:
+            return 0
+
         count = 0
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
@@ -376,33 +382,39 @@ class ASTAnalyzer:
 
     def _calculate_complexity(self, tree: ast.AST) -> int:
         """Calculate simplified cyclomatic complexity for the entire file."""
-        complexity = 1  # Base complexity
+        complexity = (
+            self.settings.ast_analysis.complexity_base
+        )  # Base complexity from settings
 
         for node in ast.walk(tree):
             if isinstance(node, (ast.If, ast.While, ast.For, ast.AsyncFor)):
-                complexity += 1
+                complexity += self.settings.ast_analysis.complexity_increment
             elif isinstance(node, ast.ExceptHandler):
-                complexity += 1
+                complexity += self.settings.ast_analysis.complexity_increment
             elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                complexity += 1
+                complexity += self.settings.ast_analysis.complexity_increment
 
-        return complexity
+        return min(complexity, self.settings.ast_analysis.max_file_complexity)
 
     def _calculate_function_complexity(
         self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]
     ) -> int:
         """Calculate cyclomatic complexity for a specific function."""
-        complexity = 1  # Base complexity
+        complexity = (
+            self.settings.ast_analysis.complexity_base
+        )  # Base complexity from settings
 
         for child in ast.walk(node):
             if isinstance(child, (ast.If, ast.While, ast.For, ast.AsyncFor)):
-                complexity += 1
+                complexity += self.settings.ast_analysis.complexity_increment
             elif isinstance(child, ast.ExceptHandler):
-                complexity += 1
+                complexity += self.settings.ast_analysis.complexity_increment
             elif isinstance(child, ast.BoolOp):
-                complexity += len(child.values) - 1
+                complexity += (
+                    len(child.values) - 1
+                ) * self.settings.ast_analysis.complexity_increment
 
-        return complexity
+        return min(complexity, self.settings.ast_analysis.max_function_complexity)
 
     def _is_top_level_function(
         self, node: Union[ast.FunctionDef, ast.AsyncFunctionDef], tree: ast.AST
@@ -434,175 +446,191 @@ class ASTAnalyzer:
         else:
             return str(node)
 
+    def _read_file_content(self, file_path: Path) -> str:
+        """
+        Read file content with encoding detection fallback.
+
+        Args:
+            file_path: Path to file to read
+
+        Returns:
+            File content as string
+
+        Raises:
+            UnicodeDecodeError: If file cannot be decoded with any encoding
+            FileNotFoundError: If file does not exist
+        """
+        # Use settings for encoding configuration
+        default_encoding = self.settings.file_analysis.default_encoding
+        fallback_encodings = self.settings.file_analysis.encoding_fallbacks
+
+        # Try default encoding first, then fallbacks
+        encodings = [default_encoding] + fallback_encodings
+
+        for encoding in encodings:
+            try:
+                with open(file_path, "r", encoding=encoding) as f:
+                    return f.read()
+            except UnicodeDecodeError:
+                continue
+
+        # If all encodings fail, raise a proper UnicodeDecodeError
+        raise UnicodeDecodeError(
+            "utf-8", b"", 0, 1, f"Unable to decode file {file_path} with any encoding"
+        )
+
+    def _parse_ast_safely(self, content: str, file_path: Path) -> Optional[ast.AST]:
+        """
+        Parse AST with enhanced error reporting.
+
+        Args:
+            content: File content to parse
+            file_path: Path for error reporting
+
+        Returns:
+            Parsed AST tree or None on error
+        """
+        try:
+            return ast.parse(content, filename=str(file_path))
+        except SyntaxError as e:
+            logger.warning(f"Syntax error in {file_path}: {e}")
+            return None
+        except Exception as e:
+            logger.error(f"Failed to parse AST for {file_path}: {e}")
+            return None
+
+    def _create_error_file_record(self, file_path: Path) -> FileRecord:
+        """
+        Create a minimal file record for files that couldn't be analyzed.
+
+        Args:
+            file_path: Path to the file that failed analysis
+
+        Returns:
+            Minimal FileRecord with error indication
+        """
+        return FileRecord(
+            name=file_path.name,
+            path=self._get_relative_path(file_path),
+            domain=self._classify_domain(file_path),
+            file_type=self._classify_file_type(file_path),
+            complexity=0,
+            lines_of_code=0,
+            classes_count=0,
+            functions_count=0,
+            imports_count=0,
+            pydantic_models_count=0,
+        )
+
+    def _extract_code_entities(
+        self, tree: ast.AST, file_path: Path
+    ) -> Tuple[List[ClassRecord], List[FunctionRecord], List[RelationshipRecord]]:
+        """
+        Extract classes, functions, and relationships from AST.
+
+        Args:
+            tree: Parsed AST tree
+            file_path: Path to the source file
+
+        Returns:
+            Tuple of classes, functions, and relationships lists
+        """
+        classes: List[ClassRecord] = []
+        functions: List[FunctionRecord] = []
+        relationships: List[RelationshipRecord] = []
+
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ClassDef):
+                class_record = self._extract_class_info(node, file_path)
+                classes.append(class_record)
+
+                # Extract methods from the class
+                for item in node.body:
+                    if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                        method_record = self._extract_function_info(
+                            item, file_path, class_name=node.name
+                        )
+                        functions.append(method_record)
+
+            elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                # Only top-level functions (not methods)
+                if self._is_top_level_function(node, tree):
+                    function_record = self._extract_function_info(node, file_path)
+                    functions.append(function_record)
+
+        # Extract relationships
+        relationships.extend(self._extract_relationships(tree, file_path))
+
+        return classes, functions, relationships
+
 
 class DatabasePopulator:
-    """Populates the SQLite database with code analysis data."""
+    """
+    Populates the SQLite database with code analysis data.
 
-    def __init__(self, db_path: str = "code_intelligence.db"):
-        self.db_path = db_path
-        self.analyzer = ASTAnalyzer()
+    This class uses the DatabaseSchemaManager for all schema operations
+    and focuses on data analysis and insertion operations.
+    """
 
-    def _get_relative_path_to_root(self, file_path: Path, root_path: Path) -> str:
-        """Get relative path from root, handling different path formats."""
+    def __init__(
+        self,
+        db_path: Optional[str] = None,
+        settings: Optional[DashboardSettings] = None,
+    ) -> None:
+        """
+        Initialize the database populator.
+
+        Args:
+            db_path: Path to the SQLite database file (optional, uses settings if not provided)
+            settings: Dashboard settings object (loads from config if not provided)
+        """
+        # Load settings if not provided
+        if settings is None:
+            try:
+                settings = DashboardSettings.from_yaml()
+            except Exception as e:
+                logger.warning(f"Could not load settings, using defaults: {e}")
+                settings = DashboardSettings()
+
+        self.settings = settings
+
+        # Set database path from settings or parameter
+        if db_path:
+            self.db_path = db_path
+        else:
+            self.db_path = getattr(
+                settings, "db_path", settings.population.default_db_path
+            )
+
+        self.analyzer = ASTAnalyzer(settings)
+        self.schema_manager = DatabaseSchemaManager(self.db_path)
+
+    def create_tables(self) -> None:
+        """
+        Create database tables using the schema manager.
+
+        This method delegates to the DatabaseSchemaManager for all
+        schema operations, maintaining separation of concerns.
+        """
         try:
-            return str(file_path.relative_to(root_path)).replace("\\", "/")
-        except ValueError:
-            # If file_path is not relative to root_path, return absolute path
-            return str(file_path).replace("\\", "/")
-
-    def create_tables(self):
-        """Create database tables with exact schema matching query expectations."""
-        with sqlite3.connect(self.db_path) as conn:
-            cursor = conn.cursor()
-
-            # Files table
-            cursor.execute(
-                """
-                CREATE TABLE IF NOT EXISTS files (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT NOT NULL,
-                    path TEXT NOT NULL UNIQUE,
-                    domain TEXT NOT NULL,
-                    file_type TEXT NOT NULL,
-                    complexity INTEGER DEFAULT 0,
-                    complexity_level TEXT DEFAULT 'low',
-                    lines_of_code INTEGER DEFAULT 0,
-                    classes_count INTEGER DEFAULT 0,
-                    functions_count INTEGER DEFAULT 0,
-                    imports_count INTEGER DEFAULT 0,
-                    pydantic_models_count INTEGER DEFAULT 0,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
-            """
-            )
-
-            # Classes table
-            cursor.execute(
-                """
-                CREATE TABLE IF NOT EXISTS classes (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT NOT NULL,
-                    file_id INTEGER NOT NULL,
-                    file_path TEXT NOT NULL,
-                    domain TEXT NOT NULL,
-                    class_type TEXT DEFAULT 'class',
-                    line_number INTEGER DEFAULT 1,
-                    methods_count INTEGER DEFAULT 0,
-                    is_abstract BOOLEAN DEFAULT FALSE,
-                    is_pydantic_model BOOLEAN DEFAULT FALSE,
-                    base_classes TEXT DEFAULT '[]',
-                    decorators TEXT DEFAULT '[]',
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (file_id) REFERENCES files (id)
-                )
-            """
-            )
-
-            # Functions table
-            cursor.execute(
-                """
-                CREATE TABLE IF NOT EXISTS functions (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT NOT NULL,
-                    file_id INTEGER NOT NULL,
-                    class_id INTEGER,
-                    file_path TEXT NOT NULL,
-                    function_type TEXT DEFAULT 'function',
-                    line_number INTEGER DEFAULT 1,
-                    parameters_count INTEGER DEFAULT 0,
-                    parameters TEXT DEFAULT '[]',
-                    return_type TEXT,
-                    is_async BOOLEAN DEFAULT FALSE,
-                    is_generator BOOLEAN DEFAULT FALSE,
-                    decorators TEXT DEFAULT '[]',
-                    complexity INTEGER DEFAULT 1,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (file_id) REFERENCES files (id),
-                    FOREIGN KEY (class_id) REFERENCES classes (id)
-                )
-            """
-            )
-
-            # Relationships table
-            cursor.execute(
-                """
-                CREATE TABLE IF NOT EXISTS relationships (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    source_type TEXT NOT NULL,
-                    source_id INTEGER NOT NULL,
-                    source_name TEXT NOT NULL,
-                    target_type TEXT NOT NULL,
-                    target_id INTEGER NOT NULL,
-                    target_name TEXT NOT NULL,
-                    relationship_type TEXT NOT NULL,
-                    file_path TEXT NOT NULL,
-                    line_number INTEGER,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
-            """
-            )
-
-            # Create indexes for better query performance
-            cursor.execute(
-                "CREATE INDEX IF NOT EXISTS idx_files_domain ON files (domain)"
-            )
-            cursor.execute(
-                "CREATE INDEX IF NOT EXISTS idx_files_type ON files (file_type)"
-            )
-            cursor.execute(
-                "CREATE INDEX IF NOT EXISTS idx_files_complexity ON files (complexity)"
-            )
-            cursor.execute(
-                "CREATE INDEX IF NOT EXISTS idx_classes_file_id ON classes (file_id)"
-            )
-            cursor.execute(
-                "CREATE INDEX IF NOT EXISTS idx_functions_file_id ON functions (file_id)"
-            )
-            cursor.execute(
-                "CREATE INDEX IF NOT EXISTS idx_functions_class_id ON functions (class_id)"
-            )
-            cursor.execute(
-                "CREATE INDEX IF NOT EXISTS idx_relationships_source ON relationships (source_type, source_id)"
-            )
-            cursor.execute(
-                "CREATE INDEX IF NOT EXISTS idx_relationships_target ON relationships (target_type, target_id)"
-            )
-
-            conn.commit()
-            logger.info("Database tables created successfully")
+            self.schema_manager.initialize_database()
+            logger.info("Database schema initialized successfully")
+        except Exception as e:
+            logger.error(f"Error initializing database schema: {e}")
+            raise
 
     def populate_from_directory(
         self,
         project_root: Path,
-        include_patterns: List[str] = None,
-        exclude_patterns: List[str] = None,
+        include_patterns: Optional[List[str]] = None,
+        exclude_patterns: Optional[List[str]] = None,
     ):
         """Populate database by analyzing all files in the project directory."""
         if include_patterns is None:
-            include_patterns = [
-                "*.py",
-                "*.js",
-                "*.html",
-                "*.css",
-                "*.md",
-                "*.json",
-                "*.yml",
-                "*.yaml",
-            ]
+            include_patterns = self.settings.file_analysis.include_patterns
 
         if exclude_patterns is None:
-            exclude_patterns = [
-                "__pycache__",
-                "*.pyc",
-                "node_modules",
-                ".git",
-                ".vscode",
-                "*.egg-info",
-            ]
+            exclude_patterns = self.settings.file_analysis.exclude_patterns
 
         logger.info(f"Starting analysis of project: {project_root}")
 
@@ -630,16 +658,14 @@ class DatabasePopulator:
 
         logger.info("Database population completed successfully")
 
-    def _clear_database(self):
-        """Clear all existing data from the database."""
-        with sqlite3.connect(self.db_path) as conn:
-            cursor = conn.cursor()
-            cursor.execute("DELETE FROM relationships")
-            cursor.execute("DELETE FROM functions")
-            cursor.execute("DELETE FROM classes")
-            cursor.execute("DELETE FROM files")
-            conn.commit()
-            logger.info("Database cleared")
+    def _clear_database(self) -> None:
+        """Clear all existing data from the database using schema manager."""
+        try:
+            self.schema_manager.clear_data()
+            logger.info("Database data cleared successfully")
+        except Exception as e:
+            logger.error(f"Error clearing database: {e}")
+            raise
 
     def _find_files(
         self,
@@ -743,6 +769,14 @@ class DatabasePopulator:
             imports_count=0,
             pydantic_models_count=0,
         )
+
+    def _get_relative_path_to_root(self, file_path: Path, root_path: Path) -> str:
+        """Get relative path from root, handling different path formats."""
+        try:
+            return str(file_path.relative_to(root_path)).replace("\\", "/")
+        except ValueError:
+            # If file_path is not relative to root_path, return absolute path
+            return str(file_path).replace("\\", "/")
 
     def _insert_file_record(self, cursor: sqlite3.Cursor, record: FileRecord) -> int:
         """Insert a file record and return its ID."""
@@ -871,26 +905,26 @@ class DatabasePopulator:
         return cursor.lastrowid
 
 
-def main():
+def main() -> None:
     """Main function to run the database population."""
     import argparse
 
     parser = argparse.ArgumentParser(description="Populate code intelligence database")
     parser.add_argument("project_root", help="Path to the project root directory")
-    parser.add_argument(
-        "--db-path", default="code_intelligence.db", help="Path to SQLite database"
-    )
+    parser.add_argument("--db-path", help="Path to SQLite database (overrides config)")
     parser.add_argument(
         "--include",
         nargs="*",
-        default=["*.py", "*.js", "*.html", "*.css", "*.md"],
-        help="File patterns to include",
+        help="File patterns to include (overrides config)",
     )
     parser.add_argument(
         "--exclude",
         nargs="*",
-        default=["__pycache__", "*.pyc", "node_modules", ".git"],
-        help="Patterns to exclude",
+        help="Patterns to exclude (overrides config)",
+    )
+    parser.add_argument(
+        "--config",
+        help="Path to configuration file (defaults to dashboard_config.yaml)",
     )
 
     args = parser.parse_args()
@@ -900,11 +934,52 @@ def main():
         logger.error(f"Project root does not exist: {project_root}")
         sys.exit(1)
 
-    populator = DatabasePopulator(args.db_path)
-    populator.create_tables()
-    populator.populate_from_directory(project_root, args.include, args.exclude)
+    # Load settings
+    try:
+        if args.config:
+            settings = DashboardSettings.from_yaml(Path(args.config))
+        else:
+            settings = DashboardSettings.from_yaml()
+        logger.info("Configuration loaded successfully")
+    except Exception as e:
+        logger.warning(f"Could not load configuration, using defaults: {e}")
+        settings = DashboardSettings()
 
-    logger.info(f"Database population completed. Database saved to: {args.db_path}")
+    # Setup logging from settings
+    try:
+        logging.basicConfig(
+            level=getattr(logging, settings.logging.level.upper(), logging.INFO),
+            format=settings.logging.format,
+            handlers=[
+                logging.StreamHandler(sys.stdout),
+                logging.FileHandler(
+                    settings.logging.files.get("populate_db", "populate_db.log"),
+                    encoding=settings.logging.encoding,
+                ),
+            ],
+        )
+        logger.info(f"Logging configured with level: {settings.logging.level}")
+    except Exception as e:
+        logger.warning(f"Could not configure logging from settings: {e}")
+        # Fallback to basic logging
+        logging.basicConfig(
+            level=logging.INFO,
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            handlers=[logging.StreamHandler(sys.stdout)],
+        )
+
+    # Create populator with settings
+    populator = DatabasePopulator(args.db_path, settings)
+    populator.create_tables()
+
+    # Use command line args if provided, otherwise use settings
+    include_patterns = args.include if args.include else None
+    exclude_patterns = args.exclude if args.exclude else None
+
+    populator.populate_from_directory(project_root, include_patterns, exclude_patterns)
+
+    db_path = args.db_path or populator.db_path
+    logger.info(f"Database population completed. Database saved to: {db_path}")
 
 
 if __name__ == "__main__":

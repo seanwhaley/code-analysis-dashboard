@@ -1,0 +1,163 @@
+/* Dashboard CSS Styles - USWDS Enhanced */
+
+/* Import USWDS Theme - Note: relative path may not work in Panel */
+/* @import url('./assets/uswds-theme.css'); */
+
+/* USWDS Core Styles - Inline for Panel compatibility */
+:root {
+  --usa-color-primary: #005ea2;
+  --usa-color-primary-dark: #1a4480;
+  --usa-color-primary-light: #73b3e7;
+  --usa-color-base-lightest: #f9f9f9;
+  --usa-color-base-darkest: #1b1b1b;
+  --usa-font-family-sans: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --usa-font-family-serif: "Merriweather", Georgia, serif;
+}
+
+/* Legacy compatibility - redirect old classes to new USWDS classes */
+.dashboard-header {
+    background-color: var(--usa-color-primary);
+    color: white;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--usa-color-primary-dark);
+}
+
+.dashboard-footer {
+    background-color: #454545;
+    color: white;
+    padding: 2rem;
+    margin-top: 3rem;
+}
+
+/* Error Page Styles */
+.error-container {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #f5c6cb;
+}
+
+.error-container h3 {
+    margin-top: 0;
+}
+
+.error-container code {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: monospace;
+}
+
+/* Stats Card Styles */
+.stats-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    border-left: 4px solid;
+}
+
+.stats-card[data-color="blue"] {
+    border-left-color: #007bff;
+}
+
+.stats-card[data-color="green"] {
+    border-left-color: #28a745;
+}
+
+.stats-card[data-color="yellow"] {
+    border-left-color: #ffc107;
+}
+
+.stats-card[data-color="red"] {
+    border-left-color: #dc3545;
+}
+
+.stats-value {
+    margin: 0;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.stats-card[data-color="blue"] .stats-value {
+    color: #007bff;
+}
+
+.stats-card[data-color="green"] .stats-value {
+    color: #28a745;
+}
+
+.stats-card[data-color="yellow"] .stats-value {
+    color: #ffc107;
+}
+
+.stats-card[data-color="red"] .stats-value {
+    color: #dc3545;
+}
+
+.stats-label {
+    margin: 5px 0 0 0;
+    color: #6c757d;
+}
+
+/* Search Results Styles */
+.search-results-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.search-result-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item strong {
+    color: #333;
+}
+
+.search-result-item small {
+    color: #666;
+}
+
+/* Utility Classes */
+.no-data-message {
+    color: #6c757d;
+    font-style: italic;
+    padding: 20px;
+    text-align: center;
+}
+
+.status-message {
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.status-message.info {
+    background: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.status-message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-message.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.status-message.warning {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}

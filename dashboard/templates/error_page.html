@@ -1,0 +1,33 @@
+<div class="usa-alert usa-alert--error" role="alert">
+    <div class="usa-alert__body">
+        <h3 class="usa-alert__heading">⚠️ Dashboard Error</h3>
+        <p class="usa-alert__text">
+            <strong>Error:</strong> $error
+        </p>
+    </div>
+</div>
+
+<div class="usa-card">
+    <div class="usa-card__container">
+        <div class="usa-card__header">
+            <h3 class="usa-card__heading">🔧 Troubleshooting Steps</h3>
+        </div>
+        <div class="usa-card__body">
+            <h4>Possible solutions:</h4>
+            <ul class="usa-list">
+                <li>Make sure the database file exists: <code>$db_path</code></li>
+                <li>Run the analysis first using the Analysis tab</li>
+                <li>Check the logs for more details</li>
+                <li>Verify all dependencies are installed: <code>pip install -r requirements.txt</code></li>
+            </ul>
+            
+            <h4>Quick start guide:</h4>
+            <ol class="usa-list">
+                <li>Go to the Analysis tab</li>
+                <li>Set your project root path</li>
+                <li>Click "Run Analysis" to populate the database</li>
+                <li>Explore your code in the other tabs</li>
+            </ol>
+        </div>
+    </div>
+</div>

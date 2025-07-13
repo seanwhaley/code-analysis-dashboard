@@ -9,21 +9,29 @@ This module provides automated validation for:
 - Panel UI functionality
 - End-to-end workflow testing
 
+Key Test Categories:
+- Database operations and integrity
+- Data model validation and serialization
+- API endpoint functionality
+- UI component behavior
+- Performance and load testing
+
 Run with: python -m pytest tests/validation.py -v
+
+Last Updated: 2025-01-27 15:30:00
 """
 
 import json
 import sqlite3
-
-# Add project root to path
 import sys
 import tempfile
 import unittest
 from pathlib import Path
-from typing import Dict, List
+from typing import Any, Dict, List, Optional
 
 import pytest
 
+# Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from db.populate_db import ASTAnalyzer, DatabasePopulator
@@ -45,9 +53,14 @@ from models.types import (
 
 
 class TestDatabaseIntegrity(unittest.TestCase):
-    """Test database schema and population integrity."""
+    """
+    Test database schema and population integrity.
 
-    def setUp(self):
+    This test class ensures that database operations maintain
+    data integrity and consistency across all operations.
+    """
+
+    def setUp(self) -> None:
         """Set up test database."""
         self.temp_db = tempfile.NamedTemporaryFile(suffix=".db", delete=False)
         self.db_path = self.temp_db.name
